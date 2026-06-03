@@ -1,0 +1,23 @@
+{
+  "name": "anime-skibidi",
+  "version": "1.0.0",
+  "description": "Anime vs Skibidi - пошаговая PvP-игра",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/cli": "^5.0.0",
+    "@capacitor/android": "^5.0.0"
+  },
+  "author": "Foggez-rfs",
+  "license": "MIT"
+}

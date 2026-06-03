@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Anime vs Skibidi</string>
+    <string name="title_activity_main">Anime vs Skibidi</string>
+    <string name="package_name">com.foggezrfs.animeskibidi</string>
+    <string name="custom_url_scheme">com.foggezrfs.animeskibidi</string>
+</resources>
