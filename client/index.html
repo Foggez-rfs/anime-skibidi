@@ -13,27 +13,30 @@
         .currency { display: flex; gap: 16px; }
         .coin, .gem { background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 20px; }
         .coin { color: #f1c40f; }
-        .gem { color: #3498db; }.tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.tab-btn { background: rgba(0,0,0,0.5); border: none; padding: 10px 20px; border-radius: 12px; color: white; cursor: pointer; }
-.tab-btn.active { background: linear-gradient(45deg, #667eea, #764ba2); }
-.panel { display: none; background: rgba(0,0,0,0.5); border-radius: 20px; padding: 20px; }
-.panel.active { display: block; }
-.pvp-menu { display: flex; flex-direction: column; gap: 15px; }
-.pvp-btn { background: linear-gradient(45deg, #667eea, #764ba2); padding: 15px; border: none; border-radius: 16px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
-.pvp-input { padding: 12px; border-radius: 12px; border: none; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 18px; }
-.room-code { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 12px; text-align: center; font-size: 24px; letter-spacing: 4px; font-weight: bold; }
-.copy-btn { background: #3498db; border: none; padding: 8px 16px; border-radius: 8px; color: white; margin-left: 10px; cursor: pointer; }.arena { background: linear-gradient(135deg, #2c1810, #1a0f0a); border-radius: 20px; padding: 20px; position: relative; }
-.vs { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: #ff6b6b; text-shadow: 0 0 20px rgba(255,107,107,0.5); }
-.characters { display: flex; justify-content: space-between; gap: 30px; }
-.character-card { flex: 1; background: rgba(0,0,0,0.6); border-radius: 16px; padding: 16px; text-align: center; }
-.hp-bar { width: 100%; height: 24px; background: #2c3e50; border-radius: 12px; overflow: hidden; margin: 10px 0; }
-.hp-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #c0392b); transition: width 0.3s; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-.controls { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
-.attack-btn { background: #e74c3c; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
-.medkit-btn { background: #2ecc71; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
-.bot-btn { background: #3498db; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-.turn-indicator { text-align: center; margin: 15px 0; font-size: 20px; font-weight: bold; }
-.message { text-align: center; margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; }        .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .gem { color: #3498db; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { background: rgba(0,0,0,0.5); border: none; padding: 10px 20px; border-radius: 12px; color: white; cursor: pointer; }
+        .tab-btn.active { background: linear-gradient(45deg, #667eea, #764ba2); }
+        .panel { display: none; background: rgba(0,0,0,0.5); border-radius: 20px; padding: 20px; }
+        .panel.active { display: block; }
+        .pvp-menu { display: flex; flex-direction: column; gap: 15px; }
+        .pvp-btn { background: linear-gradient(45deg, #667eea, #764ba2); padding: 15px; border: none; border-radius: 16px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .pvp-input { padding: 12px; border-radius: 12px; border: none; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 18px; }
+        .room-code { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 12px; text-align: center; font-size: 24px; letter-spacing: 4px; font-weight: bold; }
+        .copy-btn { background: #3498db; border: none; padding: 8px 16px; border-radius: 8px; color: white; margin-left: 10px; cursor: pointer; }
+        .arena { background: linear-gradient(135deg, #2c1810, #1a0f0a); border-radius: 20px; padding: 20px; position: relative; }
+        .vs { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: #ff6b6b; text-shadow: 0 0 20px rgba(255,107,107,0.5); }
+        .characters { display: flex; justify-content: space-between; gap: 30px; }
+        .character-card { flex: 1; background: rgba(0,0,0,0.6); border-radius: 16px; padding: 16px; text-align: center; }
+        .hp-bar { width: 100%; height: 24px; background: #2c3e50; border-radius: 12px; overflow: hidden; margin: 10px 0; }
+        .hp-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #c0392b); transition: width 0.3s; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .controls { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .attack-btn { background: #e74c3c; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
+        .medkit-btn { background: #2ecc71; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
+        .bot-btn { background: #3498db; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+        .turn-indicator { text-align: center; margin: 15px 0; font-size: 20px; font-weight: bold; }
+        .message { text-align: center; margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; }
+        .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
         .case-card { background: rgba(0,0,0,0.6); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; }
         .case-card:active { transform: scale(0.95); }
         .case-card.premium { border: 2px solid gold; }
@@ -41,7 +44,10 @@
         .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
         .inventory-item { background: rgba(0,0,0,0.6); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
         .inventory-item.selected { border: 2px solid gold; background: rgba(0,0,0,0.8); }
-        @media (max-width: 768px) { .characters { flex-direction: column; } .vs { display: none; } }
+        .promo-panel { position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 12px; z-index: 1000; display: flex; gap: 8px; }
+        .promo-input { padding: 8px; border-radius: 8px; border: none; width: 120px; }
+        .promo-btn { padding: 8px 12px; background: #f39c12; border: none; border-radius: 8px; color: white; cursor: pointer; }
+        @media (max-width: 768px) { .characters { flex-direction: column; } .vs { display: none; } .promo-panel { bottom: 5px; right: 5px; } .promo-input { width: 100px; } }
     </style>
 </head>
 <body>
@@ -52,69 +58,78 @@
                 <div class="coin">🪙 <span id="coins">0</span></div>
                 <div class="gem">💎 <span id="gems">0</span></div>
             </div>
-        </div><div class="tabs">
-    <button class="tab-btn" data-tab="pvp">🌍 PvP</button>
-    <button class="tab-btn active" data-tab="fight">🤖 Бот</button>
-    <button class="tab-btn" data-tab="cases">📦 Кейсы</button>
-    <button class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
-</div>
+        </div>
 
-<div id="pvp" class="panel">
-    <h3>🌍 ИГРАТЬ С ДРУГОМ</h3>
-    <div class="pvp-menu">
-        <button id="createRoomBtn" class="pvp-btn">✨ СОЗДАТЬ КОМНАТУ</button>
-        <div id="roomCodeDisplay" style="display: none;">
-            <p>📋 Код комнаты:</p>
-            <div class="room-code" id="roomCode">-----</div>
-            <button id="copyCodeBtn" class="copy-btn">📋 Копировать код</button>
+        <div class="tabs">
+            <button class="tab-btn" data-tab="pvp">🌍 PvP</button>
+            <button class="tab-btn active" data-tab="fight">🤖 Бот</button>
+            <button class="tab-btn" data-tab="cases">📦 Кейсы</button>
+            <button class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        </div>    <div id="pvp" class="panel">
+        <h3>🌍 ИГРАТЬ С ДРУГОМ</h3>
+        <div class="pvp-menu">
+            <button id="createRoomBtn" class="pvp-btn">✨ СОЗДАТЬ КОМНАТУ</button>
+            <div id="roomCodeDisplay" style="display: none;">
+                <p>📋 Код комнаты:</p>
+                <div class="room-code" id="roomCode">-----</div>
+                <button id="copyCodeBtn" class="copy-btn">📋 Копировать код</button>
+            </div>
+            <input type="text" id="joinRoomInput" class="pvp-input" placeholder="Введите код комнаты" maxlength="6">
+            <button id="joinRoomBtn" class="pvp-btn">🔗 ПРИСОЕДИНИТЬСЯ</button>
+            <div id="pvpStatus" class="message"></div>
         </div>
-        <input type="text" id="joinRoomInput" class="pvp-input" placeholder="Введите код комнаты" maxlength="6">
-        <button id="joinRoomBtn" class="pvp-btn">🔗 ПРИСОЕДИНИТЬСЯ</button>
-        <div id="pvpStatus" class="message"></div>
+        <div id="pvpArena" class="arena" style="display: none;">
+            <div class="vs">VS</div>
+            <div class="characters" id="pvpCharacters"></div>
+            <div id="pvpTurnIndicator" class="turn-indicator"></div>
+            <div class="controls">
+                <button id="pvpAttackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
+                <button id="pvpMedkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
+            </div>
+            <div id="pvpMessage" class="message"></div>
+            <button id="leavePvpBtn" style="margin-top: 10px; background: #e74c3c; padding: 10px; border: none; border-radius: 12px; color: white; width: 100%;">🚪 Выйти из комнаты</button>
+        </div>
     </div>
-    <div id="pvpArena" class="arena" style="display: none;">
-        <div class="vs">VS</div>
-        <div class="characters" id="pvpCharacters"></div>
-        <div id="pvpTurnIndicator" class="turn-indicator"></div>
-        <div class="controls">
-            <button id="pvpAttackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
-            <button id="pvpMedkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
-        </div>
-        <div id="pvpMessage" class="message"></div>
-        <button id="leavePvpBtn" style="margin-top: 10px; background: #e74c3c; padding: 10px; border: none; border-radius: 12px; color: white; width: 100%;">🚪 Выйти из комнаты</button>
-    </div>
-</div><div id="fight" class="panel active">
-    <h3>🤖 ВЫБОР ПЕРСОНАЖА</h3>
-    <div id="characterSelector" class="inventory-grid" style="margin-bottom: 20px;"></div>
-    <div class="arena">
-        <div class="vs">VS</div>
-        <div class="characters" id="characters">
-            <div class="character-card"><div class="character-name">?</div><div>Выберите персонажа</div></div>
-            <div class="character-card"><div class="character-name">🤖</div><div>Бот</div></div>
-        </div>
-        <div id="turnIndicator" class="turn-indicator">⚔️ Выберите персонажа и нажмите "Играть" ⚔️</div>
-        <div class="controls">
-            <button id="attackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
-            <button id="medkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
-        </div>
-        <div id="fightMessage" class="message"></div>
-    </div>
-    <button id="botBtn" class="bot-btn">🤖 ИГРАТЬ С БОТОМ</button>
-</div>
 
-<div id="cases" class="panel">
-    <h3>📦 ОТКРЫТЬ КЕЙС</h3>
-    <div class="cases-grid">
-        <div class="case-card" data-side="anime" data-price="coins"><div class="case-icon">🎴</div><h4>Anime кейс</h4><p>🪙 500 монет</p></div>
-        <div class="case-card" data-side="skibidi" data-price="coins"><div class="case-icon">🚽</div><h4>Skibidi кейс</h4><p>🪙 500 монет</p></div>
-        <div class="case-card premium" data-side="anime" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Anime</h4><p>💎 50 гемов</p></div>
-        <div class="case-card premium" data-side="skibidi" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Skibidi</h4><p>💎 50 гемов</p></div>
+    <div id="fight" class="panel active">
+        <h3>🤖 ВЫБОР ПЕРСОНАЖА</h3>
+        <div id="characterSelector" class="inventory-grid" style="margin-bottom: 20px;"></div>
+        <div class="arena">
+            <div class="vs">VS</div>
+            <div class="characters" id="characters">
+                <div class="character-card"><div class="character-name">?</div><div>Выберите персонажа</div></div>
+                <div class="character-card"><div class="character-name">🤖</div><div>Бот</div></div>
+            </div>
+            <div id="turnIndicator" class="turn-indicator">⚔️ Выберите персонажа и нажмите "Играть" ⚔️</div>
+            <div class="controls">
+                <button id="attackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
+                <button id="medkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
+            </div>
+            <div id="fightMessage" class="message"></div>
+        </div>
+        <button id="botBtn" class="bot-btn">🤖 ИГРАТЬ С БОТОМ</button>
     </div>
-    <div id="caseResult" class="message"></div>
-</div>    <div id="inventory" class="panel">
+
+    <div id="cases" class="panel">
+        <h3>📦 ОТКРЫТЬ КЕЙС</h3>
+        <div class="cases-grid">
+            <div class="case-card" data-side="anime" data-price="coins"><div class="case-icon">🎴</div><h4>Anime кейс</h4><p>🪙 500 монет</p></div>
+            <div class="case-card" data-side="skibidi" data-price="coins"><div class="case-icon">🚽</div><h4>Skibidi кейс</h4><p>🪙 500 монет</p></div>
+            <div class="case-card premium" data-side="anime" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Anime</h4><p>💎 50 гемов</p></div>
+            <div class="case-card premium" data-side="skibidi" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Skibidi</h4><p>💎 50 гемов</p></div>
+        </div>
+        <div id="caseResult" class="message"></div>
+    </div>
+
+    <div id="inventory" class="panel">
         <h3>🎒 МОИ ПЕРСОНАЖИ</h3>
         <div id="inventoryList" class="inventory-grid"></div>
     </div>
+</div>
+
+<div class="promo-panel">
+    <input type="text" id="promoCodeInput" class="promo-input" placeholder="Промокод">
+    <button id="applyPromoBtn" class="promo-btn">🎁 Активировать</button>
 </div>
 
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
@@ -131,22 +146,22 @@
         skibidi: [
             { id: 'camera_men', name: 'Камера Мен 📷', rarity: 'starter', hp: 2600, maxHp: 2600, damage: 450, hits: 1, side: 'skibidi' }
         ]
-    };
+    };const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4 };
+let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro' };
 
-    const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4 };
-    let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro' };
+function saveInventory() { localStorage.setItem('anime_data', JSON.stringify(inventory)); }
+function loadInventory() {
+    const saved = localStorage.getItem('anime_data');
+    if (saved) {
+        const data = JSON.parse(saved);
+        inventory.coins = data.coins ?? 1000;
+        inventory.gems = data.gems ?? 50;
+        inventory.characters = data.characters ?? ['zoro', 'camera_men'];
+        inventory.selectedCharacter = data.selectedCharacter ?? 'zoro';
+    }
+}
 
-    function saveInventory() { localStorage.setItem('anime_data', JSON.stringify(inventory)); }
-    function loadInventory() {
-        const saved = localStorage.getItem('anime_data');
-        if (saved) {
-            const data = JSON.parse(saved);
-            inventory.coins = data.coins ?? 1000;
-            inventory.gems = data.gems ?? 50;
-            inventory.characters = data.characters ?? ['zoro', 'camera_men'];
-            inventory.selectedCharacter = data.selectedCharacter ?? 'zoro';
-        }
-    }function updateUI() {
+function updateUI() {
     document.getElementById('coins').innerText = inventory.coins;
     document.getElementById('gems').innerText = inventory.gems;
     const invDiv = document.getElementById('inventoryList');
@@ -211,7 +226,8 @@ window.openCase = function(side, priceType) {
         document.getElementById('caseResult').innerHTML = '❌ Недостаточно средств!';
         setTimeout(() => document.getElementById('caseResult').innerHTML = '', 2000);
     }
-};let botGameState = null;
+};// ========== БОЙ С БОТОМ ==========
+let botGameState = null;
 let botIsMyTurn = false;
 
 function createBot() {
@@ -283,23 +299,24 @@ function botTurn() {
     botGameState.currentTurn = 'player';
     updateBotBattleUI();
     document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
-}        window.botUseMedkit = function() {
-            if (!botGameState || !botIsMyTurn) return;
-            const player = botGameState.players.find(p => p.id === 'player');
-            if (player.medkits > 0) {
-                const heal = Math.floor(player.maxHp * 0.2);
-                player.hp = Math.min(player.maxHp, player.hp + heal);
-                player.medkits--;
-                document.getElementById('fightMessage').innerHTML = `💊 Восстановлено ${heal} HP!`;
-                botIsMyTurn = false;
-                botGameState.currentTurn = 'bot';
-                updateBotBattleUI();
-                setTimeout(botTurn, 800);
-            } else {
-                document.getElementById('fightMessage').innerHTML = '❌ Нет аптечек!';
-            }
-        };
+}
 
+window.botUseMedkit = function() {
+    if (!botGameState || !botIsMyTurn) return;
+    const player = botGameState.players.find(p => p.id === 'player');
+    if (player.medkits > 0) {
+        const heal = Math.floor(player.maxHp * 0.2);
+        player.hp = Math.min(player.maxHp, player.hp + heal);
+        player.medkits--;
+        document.getElementById('fightMessage').innerHTML = `💊 Восстановлено ${heal} HP!`;
+        botIsMyTurn = false;
+        botGameState.currentTurn = 'bot';
+        updateBotBattleUI();
+        setTimeout(botTurn, 800);
+    } else {
+        document.getElementById('fightMessage').innerHTML = '❌ Нет аптечек!';
+    }
+};        // ========== PVP ==========
         let currentRoomId = null, pvpGameState = null, pvpIsMyTurn = false;
 
         socket.on('connect', () => { document.getElementById('pvpStatus').innerHTML = '✅ Подключено к серверу'; });
@@ -374,8 +391,44 @@ function botTurn() {
             document.getElementById('pvpStatus').innerHTML = '✅ Вы вышли из комнаты';
         };
 
+        // ========== ПРОМОКОДЫ ==========
+        const promoCodes = {
+            "WELCOME100": { coins: 100, gems: 10 },
+            "ANIME2025": { coins: 500, gems: 25 },
+            "SKIBIDI": { coins: 300, gems: 15 },
+            "PVP2025": { coins: 200, gems: 20 },
+            "GAME_KIBER": { coins: 5000, gems: 500 },
+            "MATVEY_ART": { coins: 3000, gems: 200 },
+            "FOGGEZ_END": { coins: 999999, gems: 999999, characters: ['aizen_admin', 'anime_lord', 'titan_clock', 'astro_tv'] }
+        };
+        let usedPromoCodes = JSON.parse(localStorage.getItem('used_promocodes') || '[]');
+
+        function applyPromoCode() {
+            const code = document.getElementById('promoCodeInput').value.trim().toUpperCase();
+            if (!code) { alert('Введите промокод!'); return; }
+            if (usedPromoCodes.includes(code)) { alert('❌ Промокод уже использован!'); document.getElementById('promoCodeInput').value = ''; return; }
+            const promo = promoCodes[code];
+            if (!promo) { alert('❌ Неверный промокод!'); document.getElementById('promoCodeInput').value = ''; return; }
+            let message = '✅ Получено:\n';
+            if (promo.coins) { inventory.coins += promo.coins; message += `🪙 +${promo.coins} монет\n`; }
+            if (promo.gems) { inventory.gems += promo.gems; message += `💎 +${promo.gems} гемов\n`; }
+            if (promo.characters) {
+                for (const charId of promo.characters) {
+                    if (!inventory.characters.includes(charId)) {
+                        inventory.characters.push(charId);
+                        message += `🎴 +${charId}\n`;
+                    }
+                }
+            }
+            usedPromoCodes.push(code);
+            localStorage.setItem('used_promocodes', JSON.stringify(usedPromoCodes));
+            saveInventory(); updateUI();
+            alert(message);
+            document.getElementById('promoCodeInput').value = '';
+        }
+
         document.getElementById('createRoomBtn').onclick = () => socket.emit('createRoom');
-        document.getElementById('joinRoomBtn').onclick = () => { const id = document.getElementById('joinRoomInput').value.trim().toUpperCase(); if (id) socket.emit('joinRoom', id); };
+        document.getElementById('joinRoomBtn').onclick = () => { const id = document.getElementById('joinRoomInput').value.trim().toUpperCase(); if(id) socket.emit('joinRoom', id); };
         document.getElementById('copyCodeBtn').onclick = () => navigator.clipboard.writeText(document.getElementById('roomCode').innerText);
         document.getElementById('leavePvpBtn').onclick = () => leavePvpRoom();
         document.getElementById('pvpAttackBtn').onclick = () => pvpAttack();
@@ -383,6 +436,7 @@ function botTurn() {
         document.getElementById('botBtn').onclick = () => startBotBattle();
         document.getElementById('attackBtn').onclick = () => botAttack();
         document.getElementById('medkitBtn').onclick = () => botUseMedkit();
+        document.getElementById('applyPromoBtn').onclick = () => applyPromoCode();
         document.querySelectorAll('.case-card').forEach(c => c.onclick = () => openCase(c.dataset.side, c.dataset.price));
         document.querySelectorAll('.tab-btn').forEach(btn => btn.onclick = () => {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
