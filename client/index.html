@@ -59,6 +59,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .pvp-menu { display: flex; flex-direction: column; gap: 15px; }
         .pvp-btn { background: linear-gradient(45deg, #667eea, #764ba2); padding: 15px; border: none; border-radius: 16px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .ranked-btn { background: linear-gradient(45deg, #f39c12, #e67e22); }
         .pvp-input { padding: 12px; border-radius: 12px; border: none; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 18px; }
         .room-code { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 12px; text-align: center; font-size: 24px; letter-spacing: 4px; font-weight: bold; }
         .copy-btn { background: #3498db; border: none; padding: 8px 16px; border-radius: 8px; color: white; margin-left: 10px; cursor: pointer; }
@@ -85,6 +86,14 @@
         .upgrade-item button { margin-top: 10px; padding: 6px 12px; background: #f39c12; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .profile-stats { text-align: center; margin-top: 20px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 16px; }
         .profile-stats p { margin: 10px 0; font-size: 18px; }
+        .rank-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin: 10px 0;
+            background: #cd7f32;
+        }
         @media (max-width: 768px) { .characters { flex-direction: column; } .vs { display: none; } }
     </style>
 </head>
@@ -103,6 +112,7 @@
             <h3>🌍 ИГРАТЬ С ДРУГОМ</h3>
             <div class="pvp-menu">
                 <button id="createRoomBtn" class="pvp-btn">✨ СОЗДАТЬ КОМНАТУ</button>
+                <button id="rankedBtn" class="pvp-btn ranked-btn">🏆 РАНГОВЫЙ БОЙ</button>
                 <div id="roomCodeDisplay" style="display: none;"><p>📋 Код комнаты:</p><div class="room-code" id="roomCode">-----</div><button id="copyCodeBtn" class="copy-btn">📋 Копировать код</button></div>
                 <input type="text" id="joinRoomInput" class="pvp-input" placeholder="Введите код комнаты" maxlength="6">
                 <button id="joinRoomBtn" class="pvp-btn">🔗 ПРИСОЕДИНИТЬСЯ</button>
@@ -167,9 +177,10 @@
             <div class="profile-stats">
                 <div style="font-size: 48px;">👤</div>
                 <div style="font-size: 24px; font-weight: bold;" id="playerName">Игрок</div>
+                <div class="rank-badge" id="rankBadge">Бронза 5</div>
+                <p>⭐ Рейтинговые очки: <span id="rankPoints">0</span></p>
                 <p>🎮 Всего побед: <span id="totalWins">0</span></p>
                 <p>💀 Всего поражений: <span id="totalLosses">0</span></p>
-                <p>🏆 Текущий ранг: <span id="playerRank">Бронза 5</span></p>
             </div>
             <div style="margin-top: 20px;">
                 <h4>⚙️ НАСТРОЙКИ</h4>
@@ -192,7 +203,60 @@
     <script>
         const socket = io('https://anime-skibidi.onrender.com');
         let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro', upgrades: {} };
-        let playerStats = JSON.parse(localStorage.getItem('player_stats') || '{"wins":0,"losses":0,"rank":"Бронза 5"}');        const charactersData = {
+        let playerStats = JSON.parse(localStorage.getItem('player_stats') || '{"wins":0,"losses":0}');
+        let rankPoints = parseInt(localStorage.getItem('rankPoints') || '0');
+        let isRankedMatch = false;
+
+        function calculateRank(points) {
+            if (points >= 2500) return { name: 'Платина 1', color: '#e5e4e2' };
+            if (points >= 2400) return { name: 'Платина 2', color: '#e5e4e2' };
+            if (points >= 2300) return { name: 'Платина 3', color: '#e5e4e2' };
+            if (points >= 2200) return { name: 'Платина 4', color: '#e5e4e2' };
+            if (points >= 2100) return { name: 'Платина 5', color: '#e5e4e2' };
+            if (points >= 2000) return { name: 'Алмаз 1', color: '#00bfff' };
+            if (points >= 1900) return { name: 'Алмаз 2', color: '#00bfff' };
+            if (points >= 1800) return { name: 'Алмаз 3', color: '#00bfff' };
+            if (points >= 1700) return { name: 'Алмаз 4', color: '#00bfff' };
+            if (points >= 1600) return { name: 'Алмаз 5', color: '#00bfff' };
+            if (points >= 1500) return { name: 'Золото 1', color: '#ffd700' };
+            if (points >= 1400) return { name: 'Золото 2', color: '#ffd700' };
+            if (points >= 1300) return { name: 'Золото 3', color: '#ffd700' };
+            if (points >= 1200) return { name: 'Золото 4', color: '#ffd700' };
+            if (points >= 1100) return { name: 'Золото 5', color: '#ffd700' };
+            if (points >= 1000) return { name: 'Серебро 1', color: '#c0c0c0' };
+            if (points >= 900) return { name: 'Серебро 2', color: '#c0c0c0' };
+            if (points >= 800) return { name: 'Серебро 3', color: '#c0c0c0' };
+            if (points >= 700) return { name: 'Серебро 4', color: '#c0c0c0' };
+            if (points >= 600) return { name: 'Серебро 5', color: '#c0c0c0' };
+            if (points >= 500) return { name: 'Бронза 1', color: '#cd7f32' };
+            if (points >= 400) return { name: 'Бронза 2', color: '#cd7f32' };
+            if (points >= 300) return { name: 'Бронза 3', color: '#cd7f32' };
+            if (points >= 200) return { name: 'Бронза 4', color: '#cd7f32' };
+            return { name: 'Бронза 5', color: '#cd7f32' };
+        }
+
+        function updateRankUI() {
+            const rankInfo = calculateRank(rankPoints);
+            document.getElementById('rankBadge').innerText = rankInfo.name;
+            document.getElementById('rankBadge').style.background = rankInfo.color;
+            document.getElementById('rankPoints').innerText = rankPoints;
+        }
+
+        function addRankPoints(isWin) {
+            if (isWin) {
+                rankPoints += 25;
+            } else {
+                rankPoints = Math.max(0, rankPoints - 15);
+            }
+            localStorage.setItem('rankPoints', rankPoints);
+            updateRankUI();
+        }
+
+        function savePlayerStats() {
+            localStorage.setItem('player_stats', JSON.stringify(playerStats));
+        }
+
+        const charactersData = {
             anime: [
                 { id: 'zoro', name: 'Зоро 🗡️', rarity: 'starter', baseHp: 2600, baseDamage: 300, hits: 3, side: 'anime' },
                 { id: 'naruto', name: 'Наруто 🍥', rarity: 'common', baseHp: 3000, baseDamage: 550, hits: 1, side: 'anime' },
@@ -233,8 +297,7 @@
                 { id: 'titan_clock', name: 'Титан Клок Мен ⏰', rarity: 'admin', baseHp: 100000, baseDamage: 18000, hits: 1, side: 'skibidi' },
                 { id: 'astro_tv', name: 'Астро ТВ Титан 📺', rarity: 'admin', baseHp: 85000, baseDamage: 15300, hits: 1, side: 'skibidi' }
             ]
-        };
-        const allCharacters = [...charactersData.anime, ...charactersData.skibidi, ...charactersData.admin];
+        };        const allCharacters = [...charactersData.anime, ...charactersData.skibidi, ...charactersData.admin];
         const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4 };
         
         function getCharacterStats(charId) {
@@ -269,7 +332,7 @@
             if (upDiv) { upDiv.innerHTML = inventory.characters.map(id => { let c = getCharacterStats(id); return c ? `<div class="upgrade-item"><strong>${c.name}</strong><br>⭐ ${c.rarity}<br>🔰 Уровень: ${c.level} (+${c.level*15}%)<br><button onclick="upgradeCharacter('${id}')">Улучшить (500🪙)</button></div>` : ''; }).join(''); }
             document.getElementById('totalWins').innerText = playerStats.wins;
             document.getElementById('totalLosses').innerText = playerStats.losses;
-            document.getElementById('playerRank').innerText = playerStats.rank;
+            updateRankUI();
         }
         
         function findCharacterById(id) { return allCharacters.find(c => c.id === id); }
@@ -347,7 +410,7 @@
             if (bot.hp <= 0) {
                 inventory.coins += 100;
                 playerStats.wins++;
-                saveInventory(); updateUI();
+                saveInventory(); savePlayerStats(); updateUI();
                 document.getElementById('fightMessage').innerHTML = `🏆 ПОБЕДА! +100 монет 🏆`;
                 botGameState = null;
                 updateBotBattleUI();
@@ -370,7 +433,7 @@
             document.getElementById('fightMessage').innerHTML = `🤖 Бот нанёс ${damage} урона!`;
             if (player.hp <= 0) {
                 playerStats.losses++;
-                saveInventory(); updateUI();
+                savePlayerStats(); updateUI();
                 document.getElementById('fightMessage').innerHTML = `💀 ПОРАЖЕНИЕ! 💀`;
                 botGameState = null;
                 updateBotBattleUI();
@@ -441,8 +504,10 @@
             if (pvpGameState.opponent.hp <= 0) {
                 inventory.coins += 150;
                 playerStats.wins++;
-                saveInventory(); updateUI();
+                if (isRankedMatch) addRankPoints(true);
+                saveInventory(); savePlayerStats(); updateUI();
                 document.getElementById('pvpMessage').innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
+                isRankedMatch = false;
             } else {
                 pvpIsMyTurn = false;
                 document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
@@ -468,6 +533,14 @@
             document.getElementById('pvpArena').style.display = 'none';
             document.getElementById('roomCodeDisplay').style.display = 'none';
             document.getElementById('pvpStatus').innerHTML = '✅ Вы вышли из комнаты';
+            isRankedMatch = false;
+        };
+        
+        // Ранговый бой
+        document.getElementById('rankedBtn').onclick = () => {
+            isRankedMatch = true;
+            socket.emit('createRoom');
+            document.getElementById('pvpStatus').innerHTML = '🏆 Поиск соперника...';
         };
         
         const promoCodes = {
@@ -513,10 +586,6 @@
             setTimeout(() => { div.innerHTML = ''; }, 3000);
         }
         
-        function savePlayerStats() {
-            localStorage.setItem('player_stats', JSON.stringify(playerStats));
-        }
-        
         // Навигация
         document.querySelectorAll('.nav-item').forEach(item => {
             item.onclick = () => {
@@ -528,7 +597,6 @@
         });
         document.querySelector('.nav-item').classList.add('active');
         
-        // Шестерёнка открывает профиль
         document.getElementById('settingsBtn').onclick = () => {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -536,7 +604,6 @@
             document.getElementById('profilePanel').classList.add('active');
         };
         
-        // Сброс прогресса
         document.getElementById('resetProgressBtn').onclick = () => {
             if (confirm('⚠️ ВЫ УВЕРЕНЫ? Весь прогресс будет удалён без возможности восстановления!')) {
                 localStorage.clear();
@@ -544,8 +611,7 @@
             }
         };
         
-        // Кнопки
-        document.getElementById('createRoomBtn').onclick = () => socket.emit('createRoom');
+        document.getElementById('createRoomBtn').onclick = () => { isRankedMatch = false; socket.emit('createRoom'); };
         document.getElementById('joinRoomBtn').onclick = () => { let id = document.getElementById('joinRoomInput').value.trim().toUpperCase(); if(id) socket.emit('joinRoom', id); };
         document.getElementById('copyCodeBtn').onclick = () => navigator.clipboard.writeText(document.getElementById('roomCode').innerText);
         document.getElementById('leavePvpBtn').onclick = () => leavePvpRoom();
@@ -557,7 +623,7 @@
         document.getElementById('applyPromoBtn').onclick = () => applyPromoCode();
         document.querySelectorAll('.case-card').forEach(c => c.onclick = () => openCase(c.dataset.side, c.dataset.price));
         
-        loadInventory(); updateUI(); savePlayerStats();
+        loadInventory(); updateUI(); savePlayerStats(); updateRankUI();
     </script>
 </body>
 </html>
