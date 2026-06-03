@@ -25,12 +25,35 @@
         .nav-icon { font-size: 22px; display: block; }
         .nav-label { font-size: 10px; margin-top: 3px; }
         .container { max-width: 800px; margin: 0 auto; padding: 16px; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 12px 20px; border-radius: 16px; margin-bottom: 20px; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.5);
+            padding: 12px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
         .logo { font-size: 18px; font-weight: bold; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .currency { display: flex; gap: 16px; }
         .coin, .gem { background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 20px; }
         .coin { color: #f1c40f; }
         .gem { color: #3498db; }
+        .settings-icon {
+            font-size: 28px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .settings-icon:active { background: rgba(255,255,255,0.2); transform: rotate(30deg); }
         .panel { display: none; animation: fadeIn 0.3s ease; }
         .panel.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -60,6 +83,8 @@
         .inventory-item, .upgrade-item { background: rgba(0,0,0,0.6); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
         .inventory-item.selected { border: 2px solid gold; background: rgba(0,0,0,0.8); }
         .upgrade-item button { margin-top: 10px; padding: 6px 12px; background: #f39c12; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .profile-stats { text-align: center; margin-top: 20px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 16px; }
+        .profile-stats p { margin: 10px 0; font-size: 18px; }
         @media (max-width: 768px) { .characters { flex-direction: column; } .vs { display: none; } }
     </style>
 </head>
@@ -71,6 +96,7 @@
                 <div class="coin">🪙 <span id="coins">0</span></div>
                 <div class="gem">💎 <span id="gems">0</span></div>
             </div>
+            <div class="settings-icon" id="settingsBtn">⚙️</div>
         </div>
 
         <div id="pvpPanel" class="panel">
@@ -135,6 +161,21 @@
             </div>
             <div id="promoMessage" class="message" style="margin-top: 20px;"></div>
         </div>
+
+        <div id="profilePanel" class="panel">
+            <h3>👤 ПРОФИЛЬ</h3>
+            <div class="profile-stats">
+                <div style="font-size: 48px;">👤</div>
+                <div style="font-size: 24px; font-weight: bold;" id="playerName">Игрок</div>
+                <p>🎮 Всего побед: <span id="totalWins">0</span></p>
+                <p>💀 Всего поражений: <span id="totalLosses">0</span></p>
+                <p>🏆 Текущий ранг: <span id="playerRank">Бронза 5</span></p>
+            </div>
+            <div style="margin-top: 20px;">
+                <h4>⚙️ НАСТРОЙКИ</h4>
+                <button id="resetProgressBtn" class="pvp-btn" style="background: #e74c3c; margin-top: 10px;">🔄 Сбросить прогресс</button>
+            </div>
+        </div>
     </div>
 
     <div class="bottom-nav">
@@ -144,12 +185,14 @@
         <div class="nav-item" data-panel="inventoryPanel"><span class="nav-icon">🎒</span><span class="nav-label">Инвентарь</span></div>
         <div class="nav-item" data-panel="upgradePanel"><span class="nav-icon">⬆️</span><span class="nav-label">Улучшить</span></div>
         <div class="nav-item" data-panel="promoPanel"><span class="nav-icon">🎁</span><span class="nav-label">Промо</span></div>
+        <div class="nav-item" data-panel="profilePanel"><span class="nav-icon">👤</span><span class="nav-label">Профиль</span></div>
     </div>
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
         const socket = io('https://anime-skibidi.onrender.com');
-        const charactersData = {
+        let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro', upgrades: {} };
+        let playerStats = JSON.parse(localStorage.getItem('player_stats') || '{"wins":0,"losses":0,"rank":"Бронза 5"}');        const charactersData = {
             anime: [
                 { id: 'zoro', name: 'Зоро 🗡️', rarity: 'starter', baseHp: 2600, baseDamage: 300, hits: 3, side: 'anime' },
                 { id: 'naruto', name: 'Наруто 🍥', rarity: 'common', baseHp: 3000, baseDamage: 550, hits: 1, side: 'anime' },
@@ -193,7 +236,6 @@
         };
         const allCharacters = [...charactersData.anime, ...charactersData.skibidi, ...charactersData.admin];
         const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4 };
-        let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro', upgrades: {} };
         
         function getCharacterStats(charId) {
             let char = allCharacters.find(c => c.id === charId);
@@ -225,6 +267,9 @@
             if (sel && !botGameState) { sel.innerHTML = inventory.characters.map(id => { let c = getCharacterStats(id); return c ? `<div class="inventory-item ${inventory.selectedCharacter === id ? 'selected' : ''}" onclick="selectCharacter('${id}')"><strong>${c.name}</strong><br>⭐ ${c.rarity}<br>🔰 +${c.level*15}%</div>` : ''; }).join(''); }
             const upDiv = document.getElementById('upgradeList');
             if (upDiv) { upDiv.innerHTML = inventory.characters.map(id => { let c = getCharacterStats(id); return c ? `<div class="upgrade-item"><strong>${c.name}</strong><br>⭐ ${c.rarity}<br>🔰 Уровень: ${c.level} (+${c.level*15}%)<br><button onclick="upgradeCharacter('${id}')">Улучшить (500🪙)</button></div>` : ''; }).join(''); }
+            document.getElementById('totalWins').innerText = playerStats.wins;
+            document.getElementById('totalLosses').innerText = playerStats.losses;
+            document.getElementById('playerRank').innerText = playerStats.rank;
         }
         
         function findCharacterById(id) { return allCharacters.find(c => c.id === id); }
@@ -258,167 +303,174 @@
                 document.getElementById('caseResult').innerHTML = `🎉 Выпал: <strong>${char.name}</strong> (${char.rarity})! 🎉`;
                 setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
             } else { document.getElementById('caseResult').innerHTML = '❌ Недостаточно средств!'; setTimeout(() => document.getElementById('caseResult').innerHTML = '', 2000); }
-        };let botGameState = null;
-let botIsMyTurn = false;
-
-function createBot() {
-    let botChar = charactersData.skibidi[0];
-    let level = inventory.upgrades[botChar.id] || 0;
-    let bonus = 1 + level * 0.15;
-    return { id: 'bot', name: 'Бот 🤖', hp: Math.floor(botChar.baseHp * bonus), maxHp: Math.floor(botChar.baseHp * bonus), damage: Math.floor(botChar.baseDamage * bonus), hits: botChar.hits, medkits: 3, side: 'skibidi' };
-}
-
-window.startBotBattle = function() {
-    let char = getCharacterStats(inventory.selectedCharacter);
-    if (!char) return;
-    const player = { id: 'player', name: char.name, hp: char.hp, maxHp: char.maxHp, damage: char.damage, hits: char.hits, medkits: 3, side: char.side };
-    const bot = createBot();
-    botGameState = { players: [player, bot], currentTurn: 'player' };
-    botIsMyTurn = true;
-    updateBotBattleUI();
-    document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
-    document.getElementById('fightMessage').innerHTML = '⚔️ БОЙ НАЧАЛСЯ! ⚔️';
-};
-
-function updateBotBattleUI() {
-    if (!botGameState) return;
-    let html = '';
-    for (let p of botGameState.players) {
-        let percent = (p.hp / p.maxHp) * 100;
-        let isMe = p.id === 'player';
-        html += `<div class="character-card"><div class="character-name">${p.name} ${isMe ? '(ВЫ)' : '(БОТ)'}</div><div class="hp-bar"><div class="hp-fill" style="width: ${percent}%">${p.hp}/${p.maxHp}</div></div><div>⚔️ Урон: ${p.damage}</div><div>💊 Аптечки: ${p.medkits}/3</div></div>`;
-    }
-    document.getElementById('characters').innerHTML = html;
-}
-
-window.botAttack = function() {
-    if (!botGameState || !botIsMyTurn) return;
-    let player = botGameState.players.find(p => p.id === 'player');
-    let bot = botGameState.players.find(p => p.id === 'bot');
-    let damage = player.damage * (player.hits || 1);
-    bot.hp = Math.max(0, bot.hp - damage);
-    document.getElementById('fightMessage').innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
-    if (bot.hp <= 0) {
-        inventory.coins += 100;
-        saveInventory(); updateUI();
-        document.getElementById('fightMessage').innerHTML = `🏆 ПОБЕДА! +100 монет 🏆`;
-        botGameState = null;
-        updateBotBattleUI();
-        document.getElementById('turnIndicator').innerHTML = '⚔️ Нажми "Играть" для новой битвы ⚔️';
-        return;
-    }
-    botIsMyTurn = false;
-    botGameState.currentTurn = 'bot';
-    updateBotBattleUI();
-    document.getElementById('turnIndicator').innerHTML = '🔴 ХОД БОТА 🔴';
-    setTimeout(botTurn, 800);
-};
-
-function botTurn() {
-    if (!botGameState || botGameState.currentTurn !== 'bot') return;
-    let player = botGameState.players.find(p => p.id === 'player');
-    let bot = botGameState.players.find(p => p.id === 'bot');
-    let damage = bot.damage * (bot.hits || 1);
-    player.hp = Math.max(0, player.hp - damage);
-    document.getElementById('fightMessage').innerHTML = `🤖 Бот нанёс ${damage} урона!`;
-    if (player.hp <= 0) {
-        document.getElementById('fightMessage').innerHTML = `💀 ПОРАЖЕНИЕ! 💀`;
-        botGameState = null;
-        updateBotBattleUI();
-        document.getElementById('turnIndicator').innerHTML = '⚔️ Нажми "Играть" для новой битвы ⚔️';
-        return;
-    }
-    botIsMyTurn = true;
-    botGameState.currentTurn = 'player';
-    updateBotBattleUI();
-    document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
-}
-
-window.botUseMedkit = function() {
-    if (!botGameState || !botIsMyTurn) return;
-    let player = botGameState.players.find(p => p.id === 'player');
-    if (player.medkits > 0) {
-        let heal = Math.floor(player.maxHp * 0.2);
-        player.hp = Math.min(player.maxHp, player.hp + heal);
-        player.medkits--;
-        document.getElementById('fightMessage').innerHTML = `💊 Восстановлено ${heal} HP!`;
-        botIsMyTurn = false;
-        botGameState.currentTurn = 'bot';
-        updateBotBattleUI();
-        setTimeout(botTurn, 800);
-    } else { document.getElementById('fightMessage').innerHTML = '❌ Нет аптечек!'; }
-};
-
-let currentRoomId = null, pvpGameState = null, pvpIsMyTurn = false;
-
-socket.on('connect', () => { document.getElementById('pvpStatus').innerHTML = '✅ Подключено к серверу'; });
-socket.on('roomCreated', (roomId) => {
-    currentRoomId = roomId;
-    document.getElementById('roomCodeDisplay').style.display = 'block';
-    document.getElementById('roomCode').innerText = roomId;
-    document.getElementById('pvpStatus').innerHTML = `✅ Комната создана: ${roomId}`;
-});
-socket.on('gameStart', () => { startPvPBattle(); });
-socket.on('error', (msg) => { document.getElementById('pvpStatus').innerHTML = `❌ ${msg}`; });
-
-function startPvPBattle() {
-    let char = getCharacterStats(inventory.selectedCharacter);
-    if (char) {
-        pvpGameState = { myPlayer: { ...char, hp: char.maxHp, medkits: 3 }, opponent: { name: 'Соперник', hp: 2600, maxHp: 2600, damage: 450, medkits: 3 } };
-        pvpIsMyTurn = true;
-        updatePvPUI();
-        document.getElementById('pvpArena').style.display = 'block';
-        document.getElementById('pvpTurnIndicator').innerHTML = '🟢 ВАШ ХОД!';
-        document.getElementById('pvpStatus').innerHTML = '🎮 ИГРА НАЧАЛАСЬ!';
-    }
-}
-
-function updatePvPUI() {
-    if (!pvpGameState) return;
-    let myPercent = (pvpGameState.myPlayer.hp / pvpGameState.myPlayer.maxHp) * 100;
-    let oppPercent = (pvpGameState.opponent.hp / pvpGameState.opponent.maxHp) * 100;
-    document.getElementById('pvpCharacters').innerHTML = `
-        <div class="character-card"><div class="character-name">${pvpGameState.myPlayer.name} (ВЫ)</div><div class="hp-bar"><div class="hp-fill" style="width: ${myPercent}%">${pvpGameState.myPlayer.hp}/${pvpGameState.myPlayer.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.myPlayer.damage}</div><div>💊 Аптечки: ${pvpGameState.myPlayer.medkits}/3</div></div>
-        <div class="character-card"><div class="character-name">${pvpGameState.opponent.name} (СОПЕРНИК)</div><div class="hp-bar"><div class="hp-fill" style="width: ${oppPercent}%">${pvpGameState.opponent.hp}/${pvpGameState.opponent.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.opponent.damage}</div><div>💊 Аптечки: ${pvpGameState.opponent.medkits}/3</div></div>
-    `;
-}
-
-window.pvpAttack = function() {
-    if (!pvpIsMyTurn || !currentRoomId) return;
-    let damage = pvpGameState.myPlayer.damage;
-    pvpGameState.opponent.hp = Math.max(0, pvpGameState.opponent.hp - damage);
-    updatePvPUI();
-    document.getElementById('pvpMessage').innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
-    if (pvpGameState.opponent.hp <= 0) {
-        inventory.coins += 150;
-        saveInventory(); updateUI();
-        document.getElementById('pvpMessage').innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
-    } else {
-        pvpIsMyTurn = false;
-        document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
-    }
-};
-
-window.pvpUseMedkit = function() {
-    if (!pvpIsMyTurn || !currentRoomId) return;
-    let player = pvpGameState.myPlayer;
-    if (player.medkits > 0) {
-        let heal = Math.floor(player.maxHp * 0.2);
-        player.hp = Math.min(player.maxHp, player.hp + heal);
-        player.medkits--;
-        updatePvPUI();
-        document.getElementById('pvpMessage').innerHTML = `💊 Вы восстановили ${heal} HP!`;
-        pvpIsMyTurn = false;
-        document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
-    } else { document.getElementById('pvpMessage').innerHTML = '❌ Нет аптечек!'; }
-};
-
-window.leavePvpRoom = function() {
-    currentRoomId = null; pvpGameState = null;
-    document.getElementById('pvpArena').style.display = 'none';
-    document.getElementById('roomCodeDisplay').style.display = 'none';
-    document.getElementById('pvpStatus').innerHTML = '✅ Вы вышли из комнаты';
-};        const promoCodes = {
+        };
+        
+        let botGameState = null, botIsMyTurn = false;
+        
+        function createBot() {
+            let botChar = charactersData.skibidi[0];
+            let level = inventory.upgrades[botChar.id] || 0;
+            let bonus = 1 + level * 0.15;
+            return { id: 'bot', name: 'Бот 🤖', hp: Math.floor(botChar.baseHp * bonus), maxHp: Math.floor(botChar.baseHp * bonus), damage: Math.floor(botChar.baseDamage * bonus), hits: botChar.hits, medkits: 3, side: 'skibidi' };
+        }
+        
+        window.startBotBattle = function() {
+            let char = getCharacterStats(inventory.selectedCharacter);
+            if (!char) return;
+            const player = { id: 'player', name: char.name, hp: char.hp, maxHp: char.maxHp, damage: char.damage, hits: char.hits, medkits: 3, side: char.side };
+            const bot = createBot();
+            botGameState = { players: [player, bot], currentTurn: 'player' };
+            botIsMyTurn = true;
+            updateBotBattleUI();
+            document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
+            document.getElementById('fightMessage').innerHTML = '⚔️ БОЙ НАЧАЛСЯ! ⚔️';
+        };
+        
+        function updateBotBattleUI() {
+            if (!botGameState) return;
+            let html = '';
+            for (let p of botGameState.players) {
+                let percent = (p.hp / p.maxHp) * 100;
+                let isMe = p.id === 'player';
+                html += `<div class="character-card"><div class="character-name">${p.name} ${isMe ? '(ВЫ)' : '(БОТ)'}</div><div class="hp-bar"><div class="hp-fill" style="width: ${percent}%">${p.hp}/${p.maxHp}</div></div><div>⚔️ Урон: ${p.damage}</div><div>💊 Аптечки: ${p.medkits}/3</div></div>`;
+            }
+            document.getElementById('characters').innerHTML = html;
+        }
+        
+        window.botAttack = function() {
+            if (!botGameState || !botIsMyTurn) return;
+            let player = botGameState.players.find(p => p.id === 'player');
+            let bot = botGameState.players.find(p => p.id === 'bot');
+            let damage = player.damage * (player.hits || 1);
+            bot.hp = Math.max(0, bot.hp - damage);
+            document.getElementById('fightMessage').innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
+            if (bot.hp <= 0) {
+                inventory.coins += 100;
+                playerStats.wins++;
+                saveInventory(); updateUI();
+                document.getElementById('fightMessage').innerHTML = `🏆 ПОБЕДА! +100 монет 🏆`;
+                botGameState = null;
+                updateBotBattleUI();
+                document.getElementById('turnIndicator').innerHTML = '⚔️ Нажми "Играть" для новой битвы ⚔️';
+                return;
+            }
+            botIsMyTurn = false;
+            botGameState.currentTurn = 'bot';
+            updateBotBattleUI();
+            document.getElementById('turnIndicator').innerHTML = '🔴 ХОД БОТА 🔴';
+            setTimeout(botTurn, 800);
+        };
+        
+        function botTurn() {
+            if (!botGameState || botGameState.currentTurn !== 'bot') return;
+            let player = botGameState.players.find(p => p.id === 'player');
+            let bot = botGameState.players.find(p => p.id === 'bot');
+            let damage = bot.damage * (bot.hits || 1);
+            player.hp = Math.max(0, player.hp - damage);
+            document.getElementById('fightMessage').innerHTML = `🤖 Бот нанёс ${damage} урона!`;
+            if (player.hp <= 0) {
+                playerStats.losses++;
+                saveInventory(); updateUI();
+                document.getElementById('fightMessage').innerHTML = `💀 ПОРАЖЕНИЕ! 💀`;
+                botGameState = null;
+                updateBotBattleUI();
+                document.getElementById('turnIndicator').innerHTML = '⚔️ Нажми "Играть" для новой битвы ⚔️';
+                return;
+            }
+            botIsMyTurn = true;
+            botGameState.currentTurn = 'player';
+            updateBotBattleUI();
+            document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
+        }
+        
+        window.botUseMedkit = function() {
+            if (!botGameState || !botIsMyTurn) return;
+            let player = botGameState.players.find(p => p.id === 'player');
+            if (player.medkits > 0) {
+                let heal = Math.floor(player.maxHp * 0.2);
+                player.hp = Math.min(player.maxHp, player.hp + heal);
+                player.medkits--;
+                document.getElementById('fightMessage').innerHTML = `💊 Восстановлено ${heal} HP!`;
+                botIsMyTurn = false;
+                botGameState.currentTurn = 'bot';
+                updateBotBattleUI();
+                setTimeout(botTurn, 800);
+            } else { document.getElementById('fightMessage').innerHTML = '❌ Нет аптечек!'; }
+        };
+        
+        let currentRoomId = null, pvpGameState = null, pvpIsMyTurn = false;
+        
+        socket.on('connect', () => { document.getElementById('pvpStatus').innerHTML = '✅ Подключено к серверу'; });
+        socket.on('roomCreated', (roomId) => {
+            currentRoomId = roomId;
+            document.getElementById('roomCodeDisplay').style.display = 'block';
+            document.getElementById('roomCode').innerText = roomId;
+            document.getElementById('pvpStatus').innerHTML = `✅ Комната создана: ${roomId}`;
+        });
+        socket.on('gameStart', () => { startPvPBattle(); });
+        socket.on('error', (msg) => { document.getElementById('pvpStatus').innerHTML = `❌ ${msg}`; });
+        
+        function startPvPBattle() {
+            let char = getCharacterStats(inventory.selectedCharacter);
+            if (char) {
+                pvpGameState = { myPlayer: { ...char, hp: char.maxHp, medkits: 3 }, opponent: { name: 'Соперник', hp: 2600, maxHp: 2600, damage: 450, medkits: 3 } };
+                pvpIsMyTurn = true;
+                updatePvPUI();
+                document.getElementById('pvpArena').style.display = 'block';
+                document.getElementById('pvpTurnIndicator').innerHTML = '🟢 ВАШ ХОД!';
+                document.getElementById('pvpStatus').innerHTML = '🎮 ИГРА НАЧАЛАСЬ!';
+            }
+        }
+        
+        function updatePvPUI() {
+            if (!pvpGameState) return;
+            let myPercent = (pvpGameState.myPlayer.hp / pvpGameState.myPlayer.maxHp) * 100;
+            let oppPercent = (pvpGameState.opponent.hp / pvpGameState.opponent.maxHp) * 100;
+            document.getElementById('pvpCharacters').innerHTML = `
+                <div class="character-card"><div class="character-name">${pvpGameState.myPlayer.name} (ВЫ)</div><div class="hp-bar"><div class="hp-fill" style="width: ${myPercent}%">${pvpGameState.myPlayer.hp}/${pvpGameState.myPlayer.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.myPlayer.damage}</div><div>💊 Аптечки: ${pvpGameState.myPlayer.medkits}/3</div></div>
+                <div class="character-card"><div class="character-name">${pvpGameState.opponent.name} (СОПЕРНИК)</div><div class="hp-bar"><div class="hp-fill" style="width: ${oppPercent}%">${pvpGameState.opponent.hp}/${pvpGameState.opponent.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.opponent.damage}</div><div>💊 Аптечки: ${pvpGameState.opponent.medkits}/3</div></div>
+            `;
+        }
+        
+        window.pvpAttack = function() {
+            if (!pvpIsMyTurn || !currentRoomId) return;
+            let damage = pvpGameState.myPlayer.damage;
+            pvpGameState.opponent.hp = Math.max(0, pvpGameState.opponent.hp - damage);
+            updatePvPUI();
+            document.getElementById('pvpMessage').innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
+            if (pvpGameState.opponent.hp <= 0) {
+                inventory.coins += 150;
+                playerStats.wins++;
+                saveInventory(); updateUI();
+                document.getElementById('pvpMessage').innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
+            } else {
+                pvpIsMyTurn = false;
+                document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
+            }
+        };
+        
+        window.pvpUseMedkit = function() {
+            if (!pvpIsMyTurn || !currentRoomId) return;
+            let player = pvpGameState.myPlayer;
+            if (player.medkits > 0) {
+                let heal = Math.floor(player.maxHp * 0.2);
+                player.hp = Math.min(player.maxHp, player.hp + heal);
+                player.medkits--;
+                updatePvPUI();
+                document.getElementById('pvpMessage').innerHTML = `💊 Вы восстановили ${heal} HP!`;
+                pvpIsMyTurn = false;
+                document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
+            } else { document.getElementById('pvpMessage').innerHTML = '❌ Нет аптечек!'; }
+        };
+        
+        window.leavePvpRoom = function() {
+            currentRoomId = null; pvpGameState = null;
+            document.getElementById('pvpArena').style.display = 'none';
+            document.getElementById('roomCodeDisplay').style.display = 'none';
+            document.getElementById('pvpStatus').innerHTML = '✅ Вы вышли из комнаты';
+        };
+        
+        const promoCodes = {
             "WELCOME100": { coins: 100, gems: 10 },
             "ANIME2025": { coins: 500, gems: 25 },
             "SKIBIDI": { coins: 300, gems: 15 },
@@ -461,6 +513,11 @@ window.leavePvpRoom = function() {
             setTimeout(() => { div.innerHTML = ''; }, 3000);
         }
         
+        function savePlayerStats() {
+            localStorage.setItem('player_stats', JSON.stringify(playerStats));
+        }
+        
+        // Навигация
         document.querySelectorAll('.nav-item').forEach(item => {
             item.onclick = () => {
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -471,6 +528,23 @@ window.leavePvpRoom = function() {
         });
         document.querySelector('.nav-item').classList.add('active');
         
+        // Шестерёнка открывает профиль
+        document.getElementById('settingsBtn').onclick = () => {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelector('.nav-item[data-panel="profilePanel"]').classList.add('active');
+            document.getElementById('profilePanel').classList.add('active');
+        };
+        
+        // Сброс прогресса
+        document.getElementById('resetProgressBtn').onclick = () => {
+            if (confirm('⚠️ ВЫ УВЕРЕНЫ? Весь прогресс будет удалён без возможности восстановления!')) {
+                localStorage.clear();
+                location.reload();
+            }
+        };
+        
+        // Кнопки
         document.getElementById('createRoomBtn').onclick = () => socket.emit('createRoom');
         document.getElementById('joinRoomBtn').onclick = () => { let id = document.getElementById('joinRoomInput').value.trim().toUpperCase(); if(id) socket.emit('joinRoom', id); };
         document.getElementById('copyCodeBtn').onclick = () => navigator.clipboard.writeText(document.getElementById('roomCode').innerText);
@@ -483,7 +557,7 @@ window.leavePvpRoom = function() {
         document.getElementById('applyPromoBtn').onclick = () => applyPromoCode();
         document.querySelectorAll('.case-card').forEach(c => c.onclick = () => openCase(c.dataset.side, c.dataset.price));
         
-        loadInventory(); updateUI();
+        loadInventory(); updateUI(); savePlayerStats();
     </script>
 </body>
 </html>
