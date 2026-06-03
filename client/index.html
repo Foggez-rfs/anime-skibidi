@@ -108,6 +108,7 @@
             <div class="settings-icon" id="settingsBtn">⚙️</div>
         </div>
 
+        <!-- PVP PANEL -->
         <div id="pvpPanel" class="panel">
             <h3>🌍 ИГРАТЬ С ДРУГОМ</h3>
             <div class="pvp-menu">
@@ -128,6 +129,7 @@
             </div>
         </div>
 
+        <!-- FIGHT PANEL (БОТ) -->
         <div id="fightPanel" class="panel">
             <h3>🤖 ВЫБОР ПЕРСОНАЖА</h3>
             <div id="characterSelector" class="inventory-grid" style="margin-bottom:20px;"></div>
@@ -141,6 +143,7 @@
             <button id="botBtn" class="bot-btn">🤖 ИГРАТЬ С БОТОМ</button>
         </div>
 
+        <!-- CASES PANEL -->
         <div id="casesPanel" class="panel">
             <h3>📦 ОТКРЫТЬ КЕЙС</h3>
             <div class="cases-grid">
@@ -152,17 +155,48 @@
             <div id="caseResult" class="message"></div>
         </div>
 
+        <!-- INVENTORY PANEL -->
         <div id="inventoryPanel" class="panel">
             <h3>🎒 МОИ ПЕРСОНАЖИ</h3>
             <div id="inventoryList" class="inventory-grid"></div>
         </div>
 
+        <!-- UPGRADE PANEL -->
         <div id="upgradePanel" class="panel">
             <h3>⬆️ УЛУЧШИТЬ ПЕРСОНАЖА</h3>
             <p>Каждое улучшение: +15% к ХП и урону | Стоимость: 500 монет</p>
             <div id="upgradeList" class="inventory-grid"></div>
         </div>
 
+        <!-- ADMIN PANEL (скрыта, пароль 6102) -->
+        <div id="adminPanel" class="panel">
+            <h3>👑 АДМИН-ПАНЕЛЬ</h3>
+            <div style="background: rgba(0,0,0,0.8); padding: 20px; border-radius: 16px;">
+                <h4>🎴 ФАРМ АДМИНСКИХ ПЕРСОНАЖЕЙ</h4>
+                <button id="adminAddAizen" class="pvp-btn" style="background: #9b59b6; margin: 10px 0;">➕ Айзен (Админ)</button>
+                <button id="adminAddAnimeLord" class="pvp-btn" style="background: #9b59b6; margin: 10px 0;">➕ Властелин Аниме (Админ)</button>
+                <button id="adminAddTitanClock" class="pvp-btn" style="background: #9b59b6; margin: 10px 0;">➕ Титан Клок Мен (Админ)</button>
+                <button id="adminAddAstroTV" class="pvp-btn" style="background: #9b59b6; margin: 10px 0;">➕ Астро ТВ Титан (Админ)</button>
+                <button id="adminAddAll" class="pvp-btn" style="background: #e74c3c; margin: 10px 0;">🔥 ВСЕХ АДМИНОВ СРАЗУ</button>
+                
+                <h4 style="margin-top: 20px;">💰 БЕСКОНЕЧНЫЕ РЕСУРСЫ</h4>
+                <button id="adminAddCoins" class="pvp-btn" style="background: #2ecc71; margin: 10px 0;">🪙 +1 000 000 монет</button>
+                <button id="adminAddGems" class="pvp-btn" style="background: #3498db; margin: 10px 0;">💎 +10 000 гемов</button>
+                <button id="adminAddBoth" class="pvp-btn" style="background: #f39c12; margin: 10px 0;">✨ +1 000 000 монет + 10 000 гемов</button>
+                
+                <h4 style="margin-top: 20px;">⬆️ БЕСКОНЕЧНЫЕ УЛУЧШЕНИЯ</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button id="adminUpgradeAll" class="pvp-btn" style="background: #e67e22;">⬆️ +100 уровней всем</button>
+                    <button id="adminUpgradeSelected" class="pvp-btn" style="background: #e67e22;">⬆️ +10 уровней выбранному</button>
+                </div>
+                
+                <h4 style="margin-top: 20px;">🔧 ДРУГОЕ</h4>
+                <button id="adminResetRanked" class="pvp-btn" style="background: #e74c3c;">🔄 Сбросить рейтинг (0 очков)</button>
+                <button id="adminGrant5000Ranked" class="pvp-btn" style="background: #2ecc71; margin-top: 10px;">🏆 +5000 рейтинговых очков</button>
+            </div>
+        </div>
+
+        <!-- PROMO PANEL -->
         <div id="promoPanel" class="panel">
             <h3>🎁 ПРОМОКОДЫ</h3>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
@@ -172,6 +206,7 @@
             <div id="promoMessage" class="message" style="margin-top: 20px;"></div>
         </div>
 
+        <!-- PROFILE PANEL -->
         <div id="profilePanel" class="panel">
             <h3>👤 ПРОФИЛЬ</h3>
             <div class="profile-stats">
@@ -189,6 +224,7 @@
         </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
         <div class="nav-item" data-panel="fightPanel"><span class="nav-icon">⚔️</span><span class="nav-label">Бой</span></div>
         <div class="nav-item" data-panel="pvpPanel"><span class="nav-icon">🌍</span><span class="nav-label">PvP</span></div>
@@ -201,7 +237,7 @@
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
-        // ========== ПЕРСОНАЖИ (34) ==========
+        // ========== ПЕРСОНАЖИ ==========
         const charactersData = {
             anime: [
                 { id: 'zoro', name: 'Зоро 🗡️', rarity: 'starter', baseHp: 2600, baseDamage: 300, hits: 3, side: 'anime' },
@@ -293,18 +329,13 @@
         }
         
         function addRankPoints(isWin) {
-            if (isWin) {
-                rankPoints += 25;
-            } else {
-                rankPoints = Math.max(0, rankPoints - 15);
-            }
+            if (isWin) rankPoints += 25;
+            else rankPoints = Math.max(0, rankPoints - 15);
             localStorage.setItem('rankPoints', rankPoints);
             updateRankUI();
         }
         
-        function savePlayerStats() {
-            localStorage.setItem('player_stats', JSON.stringify(playerStats));
-        }
+        function savePlayerStats() { localStorage.setItem('player_stats', JSON.stringify(playerStats)); }
         
         function getCharacterStats(charId) {
             let char = allCharacters.find(c => c.id === charId);
@@ -432,38 +463,23 @@
         };
         
         // ========== БОЙ С БОТОМ ==========
-        let botGameState = null;
-        let botIsMyTurn = false;
+        let botGameState = null, botIsMyTurn = false;
         
         function createBot() {
             let botChar = charactersData.skibidi[0];
             let level = inventory.upgrades[botChar.id] || 0;
             let bonus = 1 + level * 0.15;
             return {
-                id: 'bot',
-                name: 'Бот 🤖',
-                hp: Math.floor(botChar.baseHp * bonus),
-                maxHp: Math.floor(botChar.baseHp * bonus),
-                damage: Math.floor(botChar.baseDamage * bonus),
-                hits: botChar.hits,
-                medkits: 3,
-                side: 'skibidi'
+                id: 'bot', name: 'Бот 🤖',
+                hp: Math.floor(botChar.baseHp * bonus), maxHp: Math.floor(botChar.baseHp * bonus),
+                damage: Math.floor(botChar.baseDamage * bonus), hits: botChar.hits, medkits: 3, side: 'skibidi'
             };
         }
         
         window.startBotBattle = function() {
             let char = getCharacterStats(inventory.selectedCharacter);
             if (!char) return;
-            const player = {
-                id: 'player',
-                name: char.name,
-                hp: char.hp,
-                maxHp: char.maxHp,
-                damage: char.damage,
-                hits: char.hits,
-                medkits: 3,
-                side: char.side
-            };
+            const player = { id: 'player', name: char.name, hp: char.hp, maxHp: char.maxHp, damage: char.damage, hits: char.hits, medkits: 3, side: char.side };
             const bot = createBot();
             botGameState = { players: [player, bot], currentTurn: 'player' };
             botIsMyTurn = true;
@@ -500,9 +516,7 @@
             if (bot.hp <= 0) {
                 inventory.coins += 100;
                 playerStats.wins++;
-                saveInventory();
-                savePlayerStats();
-                updateUI();
+                saveInventory(); savePlayerStats(); updateUI();
                 if (msgDiv) msgDiv.innerHTML = `🏆 ПОБЕДА! +100 монет 🏆`;
                 botGameState = null;
                 updateBotBattleUI();
@@ -531,8 +545,7 @@
             if (msgDiv) msgDiv.innerHTML = `🤖 Бот нанёс ${damage} урона!`;
             if (player.hp <= 0) {
                 playerStats.losses++;
-                savePlayerStats();
-                updateUI();
+                savePlayerStats(); updateUI();
                 if (msgDiv) msgDiv.innerHTML = `💀 ПОРАЖЕНИЕ! 💀`;
                 botGameState = null;
                 updateBotBattleUI();
@@ -576,64 +589,45 @@
         
         // ========== PVP ==========
         const socket = io('https://anime-skibidi.onrender.com');
-        let currentRoomId = null;
-        let pvpGameState = null;
-        let pvpIsMyTurn = false;
+        let currentRoomId = null, pvpGameState = null, pvpIsMyTurn = false;
         
-        socket.on('connect', () => {
-            const statusDiv = document.getElementById('pvpStatus');
-            if (statusDiv) statusDiv.innerHTML = '✅ Подключено к серверу';
-        });
-        
+        socket.on('connect', () => { const s = document.getElementById('pvpStatus'); if (s) s.innerHTML = '✅ Подключено к серверу'; });
         socket.on('roomCreated', (roomId) => {
             currentRoomId = roomId;
-            const displayDiv = document.getElementById('roomCodeDisplay');
-            const codeSpan = document.getElementById('roomCode');
-            const statusDiv = document.getElementById('pvpStatus');
-            if (displayDiv) displayDiv.style.display = 'block';
-            if (codeSpan) codeSpan.innerText = roomId;
-            if (statusDiv) statusDiv.innerHTML = `✅ Комната создана: ${roomId}`;
+            const d = document.getElementById('roomCodeDisplay');
+            const c = document.getElementById('roomCode');
+            const s = document.getElementById('pvpStatus');
+            if (d) d.style.display = 'block';
+            if (c) c.innerText = roomId;
+            if (s) s.innerHTML = `✅ Комната создана: ${roomId}`;
         });
-        
-        socket.on('gameStart', () => {
-            startPvPBattle();
-        });
-        
-        socket.on('error', (msg) => {
-            const statusDiv = document.getElementById('pvpStatus');
-            if (statusDiv) statusDiv.innerHTML = `❌ ${msg}`;
-        });
+        socket.on('gameStart', () => { startPvPBattle(); });
+        socket.on('error', (msg) => { const s = document.getElementById('pvpStatus'); if (s) s.innerHTML = `❌ ${msg}`; });
         
         function startPvPBattle() {
             let char = getCharacterStats(inventory.selectedCharacter);
             if (char) {
-                pvpGameState = {
-                    myPlayer: { ...char, hp: char.maxHp, medkits: 3 },
-                    opponent: { name: 'Соперник', hp: 2600, maxHp: 2600, damage: 450, medkits: 3 }
-                };
+                pvpGameState = { myPlayer: { ...char, hp: char.maxHp, medkits: 3 }, opponent: { name: 'Соперник', hp: 2600, maxHp: 2600, damage: 450, medkits: 3 } };
                 pvpIsMyTurn = true;
                 updatePvPUI();
-                const arenaDiv = document.getElementById('pvpArena');
-                const turnDiv = document.getElementById('pvpTurnIndicator');
-                const statusDiv = document.getElementById('pvpStatus');
-                if (arenaDiv) arenaDiv.style.display = 'block';
-                if (turnDiv) {
-                    turnDiv.innerHTML = '🟢 ВАШ ХОД!';
-                    turnDiv.style.color = '#2ecc71';
-                }
-                if (statusDiv) statusDiv.innerHTML = '🎮 ИГРА НАЧАЛАСЬ!';
+                const a = document.getElementById('pvpArena');
+                const t = document.getElementById('pvpTurnIndicator');
+                const s = document.getElementById('pvpStatus');
+                if (a) a.style.display = 'block';
+                if (t) { t.innerHTML = '🟢 ВАШ ХОД!'; t.style.color = '#2ecc71'; }
+                if (s) s.innerHTML = '🎮 ИГРА НАЧАЛАСЬ!';
             }
         }
         
         function updatePvPUI() {
             if (!pvpGameState) return;
-            const myPercent = (pvpGameState.myPlayer.hp / pvpGameState.myPlayer.maxHp) * 100;
-            const oppPercent = (pvpGameState.opponent.hp / pvpGameState.opponent.maxHp) * 100;
-            const charsDiv = document.getElementById('pvpCharacters');
-            if (charsDiv) {
-                charsDiv.innerHTML = `
-                    <div class="character-card"><div class="character-name">${pvpGameState.myPlayer.name} (ВЫ)</div><div class="hp-bar"><div class="hp-fill" style="width: ${myPercent}%">${pvpGameState.myPlayer.hp}/${pvpGameState.myPlayer.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.myPlayer.damage}</div><div>💊 Аптечки: ${pvpGameState.myPlayer.medkits}/3</div></div>
-                    <div class="character-card"><div class="character-name">${pvpGameState.opponent.name} (СОПЕРНИК)</div><div class="hp-bar"><div class="hp-fill" style="width: ${oppPercent}%">${pvpGameState.opponent.hp}/${pvpGameState.opponent.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.opponent.damage}</div><div>💊 Аптечки: ${pvpGameState.opponent.medkits}/3</div></div>
+            const myP = (pvpGameState.myPlayer.hp / pvpGameState.myPlayer.maxHp) * 100;
+            const opP = (pvpGameState.opponent.hp / pvpGameState.opponent.maxHp) * 100;
+            const div = document.getElementById('pvpCharacters');
+            if (div) {
+                div.innerHTML = `
+                    <div class="character-card"><div class="character-name">${pvpGameState.myPlayer.name} (ВЫ)</div><div class="hp-bar"><div class="hp-fill" style="width: ${myP}%">${pvpGameState.myPlayer.hp}/${pvpGameState.myPlayer.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.myPlayer.damage}</div><div>💊 Аптечки: ${pvpGameState.myPlayer.medkits}/3</div></div>
+                    <div class="character-card"><div class="character-name">${pvpGameState.opponent.name} (СОПЕРНИК)</div><div class="hp-bar"><div class="hp-fill" style="width: ${opP}%">${pvpGameState.opponent.hp}/${pvpGameState.opponent.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.opponent.damage}</div><div>💊 Аптечки: ${pvpGameState.opponent.medkits}/3</div></div>
                 `;
             }
         }
@@ -643,24 +637,19 @@
             const damage = pvpGameState.myPlayer.damage;
             pvpGameState.opponent.hp = Math.max(0, pvpGameState.opponent.hp - damage);
             updatePvPUI();
-            const msgDiv = document.getElementById('pvpMessage');
-            if (msgDiv) msgDiv.innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
+            const msg = document.getElementById('pvpMessage');
+            if (msg) msg.innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
             if (pvpGameState.opponent.hp <= 0) {
                 inventory.coins += 150;
                 playerStats.wins++;
                 if (isRankedMatch) addRankPoints(true);
-                saveInventory();
-                savePlayerStats();
-                updateUI();
-                if (msgDiv) msgDiv.innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
+                saveInventory(); savePlayerStats(); updateUI();
+                if (msg) msg.innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
                 isRankedMatch = false;
             } else {
                 pvpIsMyTurn = false;
-                const turnDiv = document.getElementById('pvpTurnIndicator');
-                if (turnDiv) {
-                    turnDiv.innerHTML = '🔴 ХОД СОПЕРНИКА';
-                    turnDiv.style.color = '#e74c3c';
-                }
+                const t = document.getElementById('pvpTurnIndicator');
+                if (t) { t.innerHTML = '🔴 ХОД СОПЕРНИКА'; t.style.color = '#e74c3c'; }
             }
         };
         
@@ -672,29 +661,25 @@
                 player.hp = Math.min(player.maxHp, player.hp + heal);
                 player.medkits--;
                 updatePvPUI();
-                const msgDiv = document.getElementById('pvpMessage');
-                if (msgDiv) msgDiv.innerHTML = `💊 Вы восстановили ${heal} HP!`;
+                const msg = document.getElementById('pvpMessage');
+                if (msg) msg.innerHTML = `💊 Вы восстановили ${heal} HP!`;
                 pvpIsMyTurn = false;
-                const turnDiv = document.getElementById('pvpTurnIndicator');
-                if (turnDiv) {
-                    turnDiv.innerHTML = '🔴 ХОД СОПЕРНИКА';
-                    turnDiv.style.color = '#e74c3c';
-                }
+                const t = document.getElementById('pvpTurnIndicator');
+                if (t) { t.innerHTML = '🔴 ХОД СОПЕРНИКА'; t.style.color = '#e74c3c'; }
             } else {
-                const msgDiv = document.getElementById('pvpMessage');
-                if (msgDiv) msgDiv.innerHTML = '❌ Нет аптечек!';
+                const msg = document.getElementById('pvpMessage');
+                if (msg) msg.innerHTML = '❌ Нет аптечек!';
             }
         };
         
         window.leavePvpRoom = function() {
-            currentRoomId = null;
-            pvpGameState = null;
-            const arenaDiv = document.getElementById('pvpArena');
-            const displayDiv = document.getElementById('roomCodeDisplay');
-            const statusDiv = document.getElementById('pvpStatus');
-            if (arenaDiv) arenaDiv.style.display = 'none';
-            if (displayDiv) displayDiv.style.display = 'none';
-            if (statusDiv) statusDiv.innerHTML = '✅ Вы вышли из комнаты';
+            currentRoomId = null; pvpGameState = null;
+            const a = document.getElementById('pvpArena');
+            const d = document.getElementById('roomCodeDisplay');
+            const s = document.getElementById('pvpStatus');
+            if (a) a.style.display = 'none';
+            if (d) d.style.display = 'none';
+            if (s) s.innerHTML = '✅ Вы вышли из комнаты';
             isRankedMatch = false;
         };
         
@@ -710,10 +695,16 @@
         };
         let usedPromoCodes = JSON.parse(localStorage.getItem('used_promocodes') || '[]');
         
+        function showPromoMessage(msg, type) {
+            const div = document.getElementById('promoMessage');
+            div.innerHTML = msg.replace(/\n/g, '<br>');
+            div.style.color = type === 'error' ? '#ff6b6b' : '#2ecc71';
+            setTimeout(() => { div.innerHTML = ''; }, 3000);
+        }
+        
         window.applyPromoCode = function() {
             const input = document.getElementById('promoCodeInput');
             const code = input.value.trim().toUpperCase();
-            const msgDiv = document.getElementById('promoMessage');
             if (!code) { showPromoMessage('Введите промокод!', 'error'); return; }
             if (usedPromoCodes.includes(code)) { showPromoMessage('❌ Промокод уже использован!', 'error'); input.value = ''; return; }
             const promo = promoCodes[code];
@@ -731,18 +722,10 @@
             }
             usedPromoCodes.push(code);
             localStorage.setItem('used_promocodes', JSON.stringify(usedPromoCodes));
-            saveInventory();
-            updateUI();
+            saveInventory(); updateUI();
             showPromoMessage(message, 'success');
             input.value = '';
         };
-        
-        function showPromoMessage(msg, type) {
-            const div = document.getElementById('promoMessage');
-            div.innerHTML = msg.replace(/\n/g, '<br>');
-            div.style.color = type === 'error' ? '#ff6b6b' : '#2ecc71';
-            setTimeout(() => { div.innerHTML = ''; }, 3000);
-        }
         
         // ========== НАВИГАЦИЯ ==========
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -756,20 +739,37 @@
             };
         });
         
-        // Шестерёнка
+        // ШЕСТЕРЁНКА (пароль 6102)
         const settingsBtn = document.getElementById('settingsBtn');
         if (settingsBtn) {
             settingsBtn.onclick = () => {
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                const profileNav = document.querySelector('.nav-item[data-panel="profilePanel"]');
-                const profilePanel = document.getElementById('profilePanel');
-                if (profileNav) profileNav.classList.add('active');
-                if (profilePanel) profilePanel.classList.add('active');
+                const password = prompt('👑 Введите пароль для входа в админ-панель:');
+                if (password === "6102") {
+                    alert('✅ Добро пожаловать в админ-панель!');
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                    const adminPanel = document.getElementById('adminPanel');
+                    if (adminPanel) adminPanel.classList.add('active');
+                } else if (password !== null) {
+                    alert('❌ Неверный пароль! Открыт обычный профиль.');
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                    const profileNav = document.querySelector('.nav-item[data-panel="profilePanel"]');
+                    const profilePanel = document.getElementById('profilePanel');
+                    if (profileNav) profileNav.classList.add('active');
+                    if (profilePanel) profilePanel.classList.add('active');
+                } else {
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                    const profileNav = document.querySelector('.nav-item[data-panel="profilePanel"]');
+                    const profilePanel = document.getElementById('profilePanel');
+                    if (profileNav) profileNav.classList.add('active');
+                    if (profilePanel) profilePanel.classList.add('active');
+                }
             };
         }
         
-        // Сброс прогресса
+        // СБРОС ПРОГРЕССА
         const resetBtn = document.getElementById('resetProgressBtn');
         if (resetBtn) {
             resetBtn.onclick = () => {
@@ -797,12 +797,7 @@
         }
         
         const copyCodeBtn = document.getElementById('copyCodeBtn');
-        if (copyCodeBtn) {
-            copyCodeBtn.onclick = () => {
-                const codeSpan = document.getElementById('roomCode');
-                if (codeSpan) navigator.clipboard.writeText(codeSpan.innerText);
-            };
-        }
+        if (copyCodeBtn) copyCodeBtn.onclick = () => { const c = document.getElementById('roomCode'); if (c) navigator.clipboard.writeText(c.innerText); };
         
         const leavePvpBtn = document.getElementById('leavePvpBtn');
         if (leavePvpBtn) leavePvpBtn.onclick = () => leavePvpRoom();
@@ -829,13 +824,88 @@
             c.onclick = () => openCase(c.dataset.side, c.dataset.price);
         });
         
-        // Загрузка
+        // ========== АДМИН-ПАНЕЛЬ (ОБРАБОТЧИКИ) ==========
+        function addAdminCharacter(charId) {
+            let char = allCharacters.find(c => c.id === charId);
+            if (char && !inventory.characters.includes(char.id)) {
+                inventory.characters.push(char.id);
+                saveInventory(); updateUI();
+                showPromoMessage(`🎴 Добавлен: ${char.name}`, 'success');
+            } else if (char) {
+                showPromoMessage(`❌ У вас уже есть ${char.name}`, 'error');
+            }
+        }
+        
+        function addAdminCoins(amount) { inventory.coins += amount; saveInventory(); updateUI(); showPromoMessage(`🪙 +${amount} монет`, 'success'); }
+        function addAdminGems(amount) { inventory.gems += amount; saveInventory(); updateUI(); showPromoMessage(`💎 +${amount} гемов`, 'success'); }
+        function addAdminBoth() { inventory.coins += 1000000; inventory.gems += 10000; saveInventory(); updateUI(); showPromoMessage(`✨ +1 000 000 монет и +10 000 гемов`, 'success'); }
+        
+        function upgradeAllCharacters() {
+            for (let id of inventory.characters) {
+                if (!inventory.upgrades[id]) inventory.upgrades[id] = 0;
+                inventory.upgrades[id] += 100;
+            }
+            saveInventory(); updateUI();
+            showPromoMessage(`⬆️ Все персонажи улучшены на 100 уровней (+1500% к статам)`, 'success');
+        }
+        
+        function upgradeSelectedCharacter() {
+            let charId = inventory.selectedCharacter;
+            if (!inventory.upgrades[charId]) inventory.upgrades[charId] = 0;
+            inventory.upgrades[charId] += 10;
+            saveInventory(); updateUI();
+            let char = findCharacterById(charId);
+            showPromoMessage(`⬆️ ${char.name} улучшен на 10 уровней (+150% к статам)`, 'success');
+        }
+        
+        function resetRankedPoints() { rankPoints = 0; localStorage.setItem('rankPoints', rankPoints); updateRankUI(); showPromoMessage(`🔄 Рейтинг сброшен до 0`, 'success'); }
+        function add5000RankedPoints() { rankPoints += 5000; localStorage.setItem('rankPoints', rankPoints); updateRankUI(); showPromoMessage(`🏆 +5000 рейтинговых очков!`, 'success'); }
+        
+        function addAllAdmins() {
+            const adminIds = ['aizen_admin', 'anime_lord', 'titan_clock', 'astro_tv'];
+            let added = 0;
+            for (let id of adminIds) {
+                if (!inventory.characters.includes(id)) {
+                    inventory.characters.push(id);
+                    added++;
+                }
+            }
+            saveInventory(); updateUI();
+            showPromoMessage(`🔥 Добавлено ${added} админских персонажей!`, 'success');
+        }
+        
+        // АДМИН-КНОПКИ
+        const adminAddAizen = document.getElementById('adminAddAizen');
+        if (adminAddAizen) adminAddAizen.onclick = () => addAdminCharacter('aizen_admin');
+        const adminAddAnimeLord = document.getElementById('adminAddAnimeLord');
+        if (adminAddAnimeLord) adminAddAnimeLord.onclick = () => addAdminCharacter('anime_lord');
+        const adminAddTitanClock = document.getElementById('adminAddTitanClock');
+        if (adminAddTitanClock) adminAddTitanClock.onclick = () => addAdminCharacter('titan_clock');
+        const adminAddAstroTV = document.getElementById('adminAddAstroTV');
+        if (adminAddAstroTV) adminAddAstroTV.onclick = () => addAdminCharacter('astro_tv');
+        const adminAddAll = document.getElementById('adminAddAll');
+        if (adminAddAll) adminAddAll.onclick = () => addAllAdmins();
+        const adminAddCoins = document.getElementById('adminAddCoins');
+        if (adminAddCoins) adminAddCoins.onclick = () => addAdminCoins(1000000);
+        const adminAddGems = document.getElementById('adminAddGems');
+        if (adminAddGems) adminAddGems.onclick = () => addAdminGems(10000);
+        const adminAddBoth = document.getElementById('adminAddBoth');
+        if (adminAddBoth) adminAddBoth.onclick = () => addAdminBoth();
+        const adminUpgradeAll = document.getElementById('adminUpgradeAll');
+        if (adminUpgradeAll) adminUpgradeAll.onclick = () => upgradeAllCharacters();
+        const adminUpgradeSelected = document.getElementById('adminUpgradeSelected');
+        if (adminUpgradeSelected) adminUpgradeSelected.onclick = () => upgradeSelectedCharacter();
+        const adminResetRanked = document.getElementById('adminResetRanked');
+        if (adminResetRanked) adminResetRanked.onclick = () => resetRankedPoints();
+        const adminGrant5000Ranked = document.getElementById('adminGrant5000Ranked');
+        if (adminGrant5000Ranked) adminGrant5000Ranked.onclick = () => add5000RankedPoints();
+        
+        // ЗАГРУЗКА
         loadInventory();
         updateUI();
         savePlayerStats();
         updateRankUI();
         
-        // Активируем первую вкладку
         const firstNav = document.querySelector('.nav-item');
         if (firstNav) firstNav.click();
     </script>
