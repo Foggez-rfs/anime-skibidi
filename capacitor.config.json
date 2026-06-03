@@ -1,0 +1,8 @@
+{
+  "appId": "com.foggezrfs.animeskibidi",
+  "appName": "Anime vs Skibidi",
+  "webDir": "client",
+  "server": {
+    "androidScheme": "https"
+  }
+}
