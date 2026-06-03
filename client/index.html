@@ -3,73 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Anime vs Skibidi Demo</title>
+    <title>Anime vs Skibidi PvP</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
-        body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-            padding: 16px;
-        }
+        body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); font-family: 'Segoe UI', sans-serif; color: white; padding: 16px; }
         .container { max-width: 800px; margin: 0 auto; }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.5);
-            padding: 12px 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-        }
-        .logo { font-size: 20px; font-weight: bold; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 12px 20px; border-radius: 16px; margin-bottom: 20px; }
+        .logo { font-size: 18px; font-weight: bold; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .currency { display: flex; gap: 16px; }
         .coin, .gem { background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 20px; }
         .coin { color: #f1c40f; }
         .gem { color: #3498db; }
         .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab-btn {
-            background: rgba(0,0,0,0.5);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            color: white;
-            cursor: pointer;
-        }
+        .tab-btn { background: rgba(0,0,0,0.5); border: none; padding: 10px 20px; border-radius: 12px; color: white; cursor: pointer; }
         .tab-btn.active { background: linear-gradient(45deg, #667eea, #764ba2); }
         .panel { display: none; background: rgba(0,0,0,0.5); border-radius: 20px; padding: 20px; }
-        .panel.active { display: block; }
-        .arena { background: linear-gradient(135deg, #2c1810, #1a0f0a); border-radius: 20px; padding: 20px; position: relative; }
-        .vs { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: #ff6b6b; }
-        .characters { display: flex; justify-content: space-between; gap: 30px; }
-        .character-card { flex: 1; background: rgba(0,0,0,0.6); border-radius: 16px; padding: 16px; text-align: center; }
-        .hp-bar { width: 100%; height: 24px; background: #2c3e50; border-radius: 12px; overflow: hidden; margin: 10px 0; }
-        .hp-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #c0392b); transition: width 0.3s; display: flex; align-items: center; justify-content: center; font-size: 12px; }
-        .controls { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
-        .attack-btn { background: #e74c3c; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
-        .medkit-btn { background: #2ecc71; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
-        .bot-btn { background: #3498db; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
-        .turn-indicator { text-align: center; margin: 15px 0; font-size: 20px; font-weight: bold; }
-        .message { text-align: center; margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; }
-        .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .panel.active { display: block; }.pvp-menu { display: flex; flex-direction: column; gap: 15px; }
+.pvp-btn { background: linear-gradient(45deg, #667eea, #764ba2); padding: 15px; border: none; border-radius: 16px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; }
+.pvp-input { padding: 12px; border-radius: 12px; border: none; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 18px; }
+.room-code { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 12px; text-align: center; font-size: 24px; letter-spacing: 4px; font-weight: bold; }
+.arena { background: linear-gradient(135deg, #2c1810, #1a0f0a); border-radius: 20px; padding: 20px; position: relative; }
+.vs { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; color: #ff6b6b; }
+.characters { display: flex; justify-content: space-between; gap: 30px; }
+.character-card { flex: 1; background: rgba(0,0,0,0.6); border-radius: 16px; padding: 16px; text-align: center; }
+.hp-bar { width: 100%; height: 24px; background: #2c3e50; border-radius: 12px; overflow: hidden; margin: 10px 0; }
+.hp-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #c0392b); transition: width 0.3s; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.controls { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+.attack-btn { background: #e74c3c; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
+.medkit-btn { background: #2ecc71; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; }
+.bot-btn { background: #3498db; padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; }
+.turn-indicator { text-align: center; margin: 15px 0; font-size: 20px; font-weight: bold; }
+.message { text-align: center; margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; }        .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
         .case-card { background: rgba(0,0,0,0.6); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; }
         .case-card:active { transform: scale(0.95); }
         .case-card.premium { border: 2px solid gold; }
         .case-icon { font-size: 60px; }
         .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
-        .inventory-item { background: rgba(0,0,0,0.6); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
-        .inventory-item:active { transform: scale(0.95); }
+        .inventory-item { background: rgba(0,0,0,0.6); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; }
         .inventory-item.selected { border: 2px solid gold; background: rgba(0,0,0,0.8); }
-        @media (max-width: 768px) {
-            .characters { flex-direction: column; }
-            .vs { display: none; }
-        }
+        .copy-btn { background: #3498db; border: none; padding: 8px 16px; border-radius: 8px; color: white; margin-left: 10px; cursor: pointer; }
+        @media (max-width: 768px) { .characters { flex-direction: column; } .vs { display: none; } }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">⚔️ Anime vs Skibidi DEMO ⚔️</div>
+            <div class="logo">⚔️ Anime vs Skibidi PvP ⚔️</div>
             <div class="currency">
                 <div class="coin">🪙 <span id="coins">0</span></div>
                 <div class="gem">💎 <span id="gems">0</span></div>
@@ -77,328 +56,396 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="fight">⚔️ Бой</button>
+            <button class="tab-btn active" data-tab="pvp">🌍 PvP</button>
+            <button class="tab-btn" data-tab="fight">🤖 Бот</button>
             <button class="tab-btn" data-tab="cases">📦 Кейсы</button>
             <button class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        </div><div id="pvp" class="panel active">
+    <h3>🌍 ИГРАТЬ С ДРУГОМ</h3>
+    <div class="pvp-menu">
+        <button id="createRoomBtn" class="pvp-btn">✨ СОЗДАТЬ КОМНАТУ</button>
+        <div id="roomCodeDisplay" style="display: none;">
+            <p>📋 Код комнаты:</p>
+            <div class="room-code" id="roomCode">-----</div>
+            <button id="copyCodeBtn" class="copy-btn">📋 Копировать код</button>
         </div>
-
-        <div id="fight" class="panel active">
-            <h3>🤖 ВЫБОР ПЕРСОНАЖА</h3>
-            <div id="characterSelector" class="inventory-grid" style="margin-bottom: 20px; max-height: 300px; overflow-y: auto;"></div>
-            <div class="arena">
-                <div class="vs">VS</div>
-                <div class="characters" id="characters">
-                    <div class="character-card" style="opacity:0.5;"><div class="character-name">?</div><div>Выберите персонажа</div></div>
-                    <div class="character-card" style="opacity:0.5;"><div class="character-name">🤖</div><div>Бот</div></div>
-                </div>
-                <div id="turnIndicator" class="turn-indicator">⚔️ Выберите персонажа и нажмите "Играть" ⚔️</div>
-                <div class="controls">
-                    <button id="attackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
-                    <button id="medkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
-                </div>
-                <div id="fightMessage" class="message"></div>
-            </div>
-            <button id="botBtn" class="bot-btn">🤖 ИГРАТЬ С БОТОМ</button>
-        </div>
-
-        <div id="cases" class="panel">
-            <h3>📦 ОТКРЫТЬ КЕЙС</h3>
-            <div class="cases-grid">
-                <div class="case-card" data-side="anime" data-price="coins"><div class="case-icon">🎴</div><h4>Anime кейс</h4><p>🪙 500 монет</p><p style="font-size:12px; color:#aaa;">Шанс на легендарку 4%</p></div>
-                <div class="case-card" data-side="skibidi" data-price="coins"><div class="case-icon">🚽</div><h4>Skibidi кейс</h4><p>🪙 500 монет</p><p style="font-size:12px; color:#aaa;">Шанс на легендарку 4%</p></div>
-                <div class="case-card premium" data-side="anime" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Anime</h4><p>💎 50 гемов</p><p style="font-size:12px; color:#aaa;">Повышенный шанс</p></div>
-                <div class="case-card premium" data-side="skibidi" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Skibidi</h4><p>💎 50 гемов</p><p style="font-size:12px; color:#aaa;">Повышенный шанс</p></div>
-            </div>
-            <div id="caseResult" class="message"></div>
-        </div>
-
-        <div id="inventory" class="panel">
-            <h3>🎒 МОИ ПЕРСОНАЖИ</h3>
-            <div id="inventoryList" class="inventory-grid"></div>
-        </div>
+        <input type="text" id="joinRoomInput" class="pvp-input" placeholder="Введите код комнаты" maxlength="6">
+        <button id="joinRoomBtn" class="pvp-btn">🔗 ПРИСОЕДИНИТЬСЯ</button>
+        <div id="pvpStatus" class="message"></div>
     </div>
+    <div id="pvpArena" class="arena" style="display: none; margin-top: 20px;">
+        <div class="vs">VS</div>
+        <div class="characters" id="pvpCharacters">
+            <div class="character-card"><div class="character-name">Ожидание...</div></div>
+            <div class="character-card"><div class="character-name">Ожидание...</div></div>
+        </div>
+        <div id="pvpTurnIndicator" class="turn-indicator"></div>
+        <div class="controls">
+            <button id="pvpAttackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
+            <button id="pvpMedkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
+        </div>
+        <div id="pvpMessage" class="message"></div>
+        <button id="leavePvpBtn" style="margin-top: 10px; background: #e74c3c; padding: 10px; border: none; border-radius: 12px; color: white; width: 100%;">🚪 Выйти из комнаты</button>
+    </div>
+</div><div id="fight" class="panel">
+    <h3>🤖 ВЫБОР ПЕРСОНАЖА</h3>
+    <div id="characterSelector" class="inventory-grid" style="margin-bottom: 20px; max-height: 300px; overflow-y: auto;"></div>
+    <div class="arena">
+        <div class="vs">VS</div>
+        <div class="characters" id="characters">
+            <div class="character-card"><div class="character-name">?</div><div>Выберите персонажа</div></div>
+            <div class="character-card"><div class="character-name">🤖</div><div>Бот</div></div>
+        </div>
+        <div id="turnIndicator" class="turn-indicator">⚔️ Выберите персонажа и нажмите "Играть" ⚔️</div>
+        <div class="controls">
+            <button id="attackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
+            <button id="medkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
+        </div>
+        <div id="fightMessage" class="message"></div>
+    </div>
+    <button id="botBtn" class="bot-btn">🤖 ИГРАТЬ С БОТОМ</button>
+</div>
 
-    <script>
-        // ========== ДАННЫЕ ПЕРСОНАЖЕЙ ==========
-        const charactersData = {
-            anime: [
-                { id: 'zoro', name: 'Зоро 🗡️', rarity: 'starter', hp: 2600, maxHp: 2600, damage: 300, hits: 3, side: 'anime' },
-                { id: 'naruto', name: 'Наруто 🍥', rarity: 'common', hp: 3000, maxHp: 3000, damage: 550, hits: 1, side: 'anime' },
-                { id: 'sasuke', name: 'Саске ⚡', rarity: 'common', hp: 3000, maxHp: 3000, damage: 550, hits: 1, side: 'anime' },
-                { id: 'levi', name: 'Леви ⚔️', rarity: 'rare', hp: 7500, maxHp: 7500, damage: 1350, hits: 1, side: 'anime' },
-                { id: 'tanjiro', name: 'Танджиро 🔥', rarity: 'rare', hp: 10000, maxHp: 10000, damage: 1800, hits: 1, side: 'anime' },
-                { id: 'gojo', name: 'Годжо 👁️', rarity: 'epic', hp: 12000, maxHp: 12000, damage: 2150, hits: 1, side: 'anime' },
-                { id: 'eren', name: 'Эрен 💀', rarity: 'epic', hp: 1000, maxHp: 1000, damage: 180, hits: 1, side: 'anime' },
-                { id: 'goku', name: 'Гоку 🐉', rarity: 'legendary', hp: 18000, maxHp: 18000, damage: 3200, hits: 1, side: 'anime' },
-                { id: 'saitama', name: 'Сайтама 👊', rarity: 'mythical', hp: 27000, maxHp: 27000, damage: 4800, hits: 1, side: 'anime' },
-                { id: 'ui_goku', name: 'УИ Гоку ✨', rarity: 'secret', hp: 35000, maxHp: 35000, damage: 6300, hits: 1, side: 'anime' },
-                { id: 'zeno', name: 'Дзено 👑', rarity: 'ultra', hp: 50000, maxHp: 50000, damage: 9000, hits: 1, side: 'anime' },
-                { id: 'aizen', name: 'Айзен 🎭', rarity: 'admin', hp: 100000, maxHp: 100000, damage: 18000, hits: 1, side: 'anime' }
-            ],
-            skibidi: [
-                { id: 'camera_men', name: 'Камера Мен 📷', rarity: 'starter', hp: 2600, maxHp: 2600, damage: 450, hits: 1, side: 'skibidi' },
-                { id: 'big_camera', name: 'Большой Камера Мен 📹', rarity: 'common', hp: 3000, maxHp: 3000, damage: 550, hits: 1, side: 'skibidi' },
-                { id: 'skibidi_toilet', name: 'Скибиди Туалет 🚽', rarity: 'common', hp: 3000, maxHp: 3000, damage: 550, hits: 1, side: 'skibidi' },
-                { id: 'speaker_men', name: 'Спикер Мен 🔊', rarity: 'rare', hp: 7500, maxHp: 7500, damage: 1350, hits: 1, side: 'skibidi' },
-                { id: 'tv_men', name: 'ТВ Мен 📺', rarity: 'epic', hp: 12000, maxHp: 12000, damage: 2150, hits: 1, side: 'skibidi' },
-                { id: 'tv_women', name: 'ТВ Вумен 📺', rarity: 'epic', hp: 10000, maxHp: 10000, damage: 8000, hits: 1, side: 'skibidi' },
-                { id: 'speaker_executor', name: 'Спикер Исполнитель 🎵', rarity: 'mythical', hp: 27000, maxHp: 27000, damage: 4800, hits: 1, side: 'skibidi' },
-                { id: 'titan_siren', name: 'Титан Сирена 🚨', rarity: 'ultra', hp: 50000, maxHp: 50000, damage: 9000, hits: 1, side: 'skibidi' }
-            ]
-        };
+<div id="cases" class="panel">
+    <h3>📦 ОТКРЫТЬ КЕЙС</h3>
+    <div class="cases-grid">
+        <div class="case-card" data-side="anime" data-price="coins"><div class="case-icon">🎴</div><h4>Anime кейс</h4><p>🪙 500 монет</p></div>
+        <div class="case-card" data-side="skibidi" data-price="coins"><div class="case-icon">🚽</div><h4>Skibidi кейс</h4><p>🪙 500 монет</p></div>
+        <div class="case-card premium" data-side="anime" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Anime</h4><p>💎 50 гемов</p></div>
+        <div class="case-card premium" data-side="skibidi" data-price="gems"><div class="case-icon">✨</div><h4>Премиум Skibidi</h4><p>💎 50 гемов</p></div>
+    </div>
+    <div id="caseResult" class="message"></div>
+</div>    <div id="inventory" class="panel">
+        <h3>🎒 МОИ ПЕРСОНАЖИ</h3>
+        <div id="inventoryList" class="inventory-grid"></div>
+    </div>
+</div>
 
-        const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4, mythical: 2, secret: 0.8, ultra: 0.2 };
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-        // ========== СОХРАНЕНИЕ ==========
-        let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro' };
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAdpIrnKZWXpNLe6u3hTZEbnUe9GPKTD88",
+        authDomain: "anime-skibidi-pvp.firebaseapp.com",
+        databaseURL: "https://anime-skibidi-pvp-default-rtdb.firebaseio.com",
+        projectId: "anime-skibidi-pvp",
+        storageBucket: "anime-skibidi-pvp.firebasestorage.app",
+        messagingSenderId: "133639690076",
+        appId: "1:133639690076:web:7d773a7b2f1a4166701399"
+    };
 
-        function saveInventory() {
-            localStorage.setItem('anime_skibidi_demo', JSON.stringify({
-                coins: inventory.coins,
-                gems: inventory.gems,
-                characters: inventory.characters,
-                selectedCharacter: inventory.selectedCharacter
-            }));
-        }
+    let database = null;
+    let firebaseReady = false;
+    try {
+        const app = firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+        firebaseReady = true;
+    } catch(e) { console.warn('Firebase error'); }
 
-        function loadInventory() {
-            const saved = localStorage.getItem('anime_skibidi_demo');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    inventory.coins = data.coins ?? 1000;
-                    inventory.gems = data.gems ?? 50;
-                    inventory.characters = data.characters ?? ['zoro', 'camera_men'];
-                    inventory.selectedCharacter = data.selectedCharacter ?? 'zoro';
-                } catch(e) { resetToDefault(); }
-            } else { resetToDefault(); }
-        }
+    const charactersData = {
+        anime: [
+            { id: 'zoro', name: 'Зоро 🗡️', rarity: 'starter', hp: 2600, maxHp: 2600, damage: 300, hits: 3, side: 'anime' },
+            { id: 'naruto', name: 'Наруто 🍥', rarity: 'common', hp: 3000, maxHp: 3000, damage: 550, hits: 1, side: 'anime' },
+            { id: 'goku', name: 'Гоку 🐉', rarity: 'legendary', hp: 18000, maxHp: 18000, damage: 3200, hits: 1, side: 'anime' }
+        ],
+        skibidi: [
+            { id: 'camera_men', name: 'Камера Мен 📷', rarity: 'starter', hp: 2600, maxHp: 2600, damage: 450, hits: 1, side: 'skibidi' }
+        ]
+    };const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4 };
+let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro' };
 
-        function resetToDefault() {
-            inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro' };
-            saveInventory();
-        }
+function saveInventory() { localStorage.setItem('anime_data', JSON.stringify(inventory)); }
+function loadInventory() {
+    const saved = localStorage.getItem('anime_data');
+    if (saved) {
+        const data = JSON.parse(saved);
+        inventory.coins = data.coins ?? 1000;
+        inventory.gems = data.gems ?? 50;
+        inventory.characters = data.characters ?? ['zoro', 'camera_men'];
+        inventory.selectedCharacter = data.selectedCharacter ?? 'zoro';
+    }
+}
 
-        // ========== UI ==========
-        function updateUI() {
-            document.getElementById('coins').innerText = inventory.coins;
-            document.getElementById('gems').innerText = inventory.gems;
-            
-            const invDiv = document.getElementById('inventoryList');
-            if (invDiv) {
-                invDiv.innerHTML = inventory.characters.map(id => {
-                    let char = findCharacterById(id);
-                    return char ? `<div class="inventory-item"><strong>${char.name}</strong><br>⭐ ${char.rarity}</div>` : '';
-                }).join('');
-            }
-            
-            const selector = document.getElementById('characterSelector');
-            if (selector && !gameState) {
-                selector.innerHTML = inventory.characters.map(id => {
-                    let char = findCharacterById(id);
-                    const isSelected = inventory.selectedCharacter === id;
-                    return char ? `<div class="inventory-item ${isSelected ? 'selected' : ''}" onclick="selectCharacter('${id}')"><strong>${char.name}</strong><br>⭐ ${char.rarity}</div>` : '';
-                }).join('');
-            }
-        }
+function updateUI() {
+    document.getElementById('coins').innerText = inventory.coins;
+    document.getElementById('gems').innerText = inventory.gems;
+    const invDiv = document.getElementById('inventoryList');
+    if (invDiv) {
+        invDiv.innerHTML = inventory.characters.map(id => {
+            let char = [...charactersData.anime, ...charactersData.skibidi].find(c => c.id === id);
+            return char ? `<div class="inventory-item"><strong>${char.name}</strong><br>⭐ ${char.rarity}</div>` : '';
+        }).join('');
+    }
+    const selector = document.getElementById('characterSelector');
+    if (selector && !botGameState) {
+        selector.innerHTML = inventory.characters.map(id => {
+            let char = [...charactersData.anime, ...charactersData.skibidi].find(c => c.id === id);
+            const isSelected = inventory.selectedCharacter === id;
+            return char ? `<div class="inventory-item ${isSelected ? 'selected' : ''}" onclick="selectCharacter('${id}')"><strong>${char.name}</strong><br>⭐ ${char.rarity}</div>` : '';
+        }).join('');
+    }
+}
 
-        function findCharacterById(id) {
-            for (const char of [...charactersData.anime, ...charactersData.skibidi]) {
-                if (char.id === id) return { ...char };
-            }
-            return null;
-        }
+function findCharacterById(id) {
+    return [...charactersData.anime, ...charactersData.skibidi].find(c => c.id === id);
+}
 
-        window.selectCharacter = function(id) {
-            inventory.selectedCharacter = id;
-            saveInventory();
-            updateUI();
-            document.getElementById('fightMessage').innerHTML = `✅ Выбран: ${findCharacterById(id).name}`;
-            setTimeout(() => document.getElementById('fightMessage').innerHTML = '', 1500);
-        };
+window.selectCharacter = function(id) {
+    inventory.selectedCharacter = id;
+    saveInventory();
+    updateUI();
+    document.getElementById('fightMessage').innerHTML = `✅ Выбран: ${findCharacterById(id).name}`;
+    setTimeout(() => document.getElementById('fightMessage').innerHTML = '', 1500);
+};function getRandomCharacter(side) {
+    const list = charactersData[side];
+    const rand = Math.random() * 100;
+    let cumulative = 0;
+    for (const char of list) {
+        cumulative += caseRates[char.rarity] || 1;
+        if (rand <= cumulative) return { ...char, hp: char.hp, maxHp: char.maxHp, medkits: 3 };
+    }
+    return { ...list[0], hp: list[0].hp, maxHp: list[0].maxHp, medkits: 3 };
+}
 
-        function getRandomCharacter(side) {
-            const list = charactersData[side];
-            const rand = Math.random() * 100;
-            let cumulative = 0;
-            for (const char of list) {
-                cumulative += caseRates[char.rarity] || 1;
-                if (rand <= cumulative) return { ...char, hp: char.hp, maxHp: char.maxHp, medkits: 3 };
-            }
-            return { ...list[0], hp: list[0].hp, maxHp: list[0].maxHp, medkits: 3 };
-        }
+window.openCase = function(side, priceType) {
+    const cost = priceType === 'coins' ? 500 : 50;
+    if (priceType === 'coins' && inventory.coins >= cost) {
+        inventory.coins -= cost;
+        const char = getRandomCharacter(side);
+        inventory.characters.push(char.id);
+        saveInventory();
+        document.getElementById('caseResult').innerHTML = `🎉 Выпал: ${char.name} (${char.rarity})! 🎉`;
+        updateUI();
+        setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
+    } else if (priceType === 'gems' && inventory.gems >= cost) {
+        inventory.gems -= cost;
+        const char = getRandomCharacter(side);
+        inventory.characters.push(char.id);
+        saveInventory();
+        document.getElementById('caseResult').innerHTML = `🎉 Выпал: ${char.name} (${char.rarity})! 🎉`;
+        updateUI();
+        setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
+    } else {
+        document.getElementById('caseResult').innerHTML = '❌ Недостаточно средств!';
+        setTimeout(() => document.getElementById('caseResult').innerHTML = '', 2000);
+    }
+};
 
-        window.openCase = function(side, priceType) {
-            const cost = priceType === 'coins' ? 500 : 50;
-            if (priceType === 'coins' && inventory.coins >= cost) {
-                inventory.coins -= cost;
-                const char = getRandomCharacter(side);
-                inventory.characters.push(char.id);
-                saveInventory();
-                document.getElementById('caseResult').innerHTML = `🎉 Вам выпал: <strong>${char.name}</strong> (${char.rarity})! 🎉`;
-                updateUI();
-                setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
-            } else if (priceType === 'gems' && inventory.gems >= cost) {
-                inventory.gems -= cost;
-                const char = getRandomCharacter(side);
-                inventory.characters.push(char.id);
-                saveInventory();
-                document.getElementById('caseResult').innerHTML = `🎉 Вам выпал: <strong>${char.name}</strong> (${char.rarity})! 🎉`;
-                updateUI();
-                setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
-            } else {
-                document.getElementById('caseResult').innerHTML = '❌ Недостаточно средств!';
-                setTimeout(() => document.getElementById('caseResult').innerHTML = '', 2000);
-            }
-        };
+let botGameState = null;
+let botIsMyTurn = false;
 
-        // ========== БОЙ ==========
-        let gameState = null;
-        let isMyTurn = false;
+function createBot() {
+    const botChar = charactersData.skibidi[0];
+    return { id: 'bot', name: 'Бот 🤖', hp: botChar.hp, maxHp: botChar.maxHp, damage: botChar.damage, hits: botChar.hits, medkits: 3, side: 'skibidi' };
+}
 
-        function createBot() {
-            const botChar = charactersData.skibidi[0];
-            return {
-                id: 'bot',
-                name: 'Бот 🤖',
-                hp: botChar.hp,
-                maxHp: botChar.maxHp,
-                damage: botChar.damage,
-                hits: botChar.hits,
-                medkits: 3,
-                side: 'skibidi',
-                isBot: true
-            };
-        }
+window.startBotBattle = function() {
+    const char = findCharacterById(inventory.selectedCharacter);
+    if (!char) return;
+    const player = { id: 'player', name: char.name, hp: char.hp, maxHp: char.maxHp, damage: char.damage, hits: char.hits, medkits: 3, side: char.side };
+    const bot = createBot();
+    botGameState = { players: [player, bot], currentTurn: 'player' };
+    botIsMyTurn = true;
+    updateBotBattleUI();
+    document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
+    document.getElementById('fightMessage').innerHTML = '⚔️ БОЙ НАЧАЛСЯ! ⚔️';
+};function updateBotBattleUI() {
+    if (!botGameState) return;
+    let html = '';
+    for (const player of botGameState.players) {
+        const hpPercent = (player.hp / player.maxHp) * 100;
+        const isMe = player.id === 'player';
+        html += `<div class="character-card"><div class="character-name">${player.name} ${isMe ? '(ВЫ)' : '(БОТ)'}</div><div class="hp-bar"><div class="hp-fill" style="width: ${hpPercent}%">${player.hp}/${player.maxHp}</div></div><div>⚔️ Урон: ${player.damage}</div><div>💊 Аптечки: ${player.medkits}/3</div></div>`;
+    }
+    document.getElementById('characters').innerHTML = html;
+}
 
-        window.startBattle = function() {
-            const char = findCharacterById(inventory.selectedCharacter);
-            if (!char) return;
-            
-            const player = {
-                id: 'player',
-                name: char.name,
-                hp: char.hp,
-                maxHp: char.maxHp,
-                damage: char.damage,
-                hits: char.hits,
-                medkits: 3,
-                side: char.side,
-                isBot: false
-            };
-            
-            const bot = createBot();
-            gameState = { players: [player, bot], currentTurn: 'player' };
-            isMyTurn = true;
-            updateBattleUI();
-            document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
-            document.getElementById('turnIndicator').style.color = '#2ecc71';
-            document.getElementById('fightMessage').innerHTML = '⚔️ БОЙ НАЧАЛСЯ! ⚔️';
-        };
-
-        function updateBattleUI() {
-            if (!gameState) return;
-            let html = '';
-            for (const player of gameState.players) {
-                const hpPercent = (player.hp / player.maxHp) * 100;
-                const isMe = player.id === 'player';
-                html += `<div class="character-card">
-                    <div class="character-name">${player.name} ${isMe ? '(ВЫ)' : '(БОТ)'}</div>
-                    <div class="hp-bar"><div class="hp-fill" style="width: ${hpPercent}%">${player.hp}/${player.maxHp}</div></div>
-                    <div>⚔️ Урон: ${player.damage}${player.hits > 1 ? ` ×${player.hits}` : ''}</div>
-                    <div>💊 Аптечки: ${player.medkits}/3</div>
-                </div>`;
-            }
-            document.getElementById('characters').innerHTML = html;
-        }
-
-        window.playerAttack = function() {
-            if (!gameState || !isMyTurn) { document.getElementById('fightMessage').innerHTML = '⏳ Сейчас не ваш ход!'; return; }
-            
-            const player = gameState.players.find(p => p.id === 'player');
-            const bot = gameState.players.find(p => p.id === 'bot');
-            const damage = player.damage * (player.hits || 1);
-            bot.hp = Math.max(0, bot.hp - damage);
-            document.getElementById('fightMessage').innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
-            
-            if (bot.hp <= 0) {
-                inventory.coins += 100;
-                saveInventory();
-                updateUI();
-                document.getElementById('fightMessage').innerHTML = `🏆 ПОБЕДА! +100 монет 🏆`;
-                gameState = null;
-                updateBattleUI();
-                document.getElementById('turnIndicator').innerHTML = '⚔️ Нажми "Играть" для новой битвы ⚔️';
-                document.getElementById('turnIndicator').style.color = 'white';
-                return;
-            }
-            
-            isMyTurn = false;
-            gameState.currentTurn = 'bot';
-            updateBattleUI();
-            document.getElementById('turnIndicator').innerHTML = '🔴 ХОД БОТА 🔴';
-            setTimeout(() => botTurn(), 800);
-        };
-
-        function botTurn() {
-            if (!gameState || gameState.currentTurn !== 'bot') return;
-            const player = gameState.players.find(p => p.id === 'player');
-            const bot = gameState.players.find(p => p.id === 'bot');
-            const damage = bot.damage * (bot.hits || 1);
-            player.hp = Math.max(0, player.hp - damage);
-            document.getElementById('fightMessage').innerHTML = `🤖 Бот нанёс ${damage} урона!`;
-            
+window.botAttack = function() {
+    if (!botGameState || !botIsMyTurn) return;
+    const player = botGameState.players.find(p => p.id === 'player');
+    const bot = botGameState.players.find(p => p.id === 'bot');
+    const damage = player.damage * (player.hits || 1);
+    bot.hp = Math.max(0, bot.hp - damage);
+    if (bot.hp <= 0) {
+        inventory.coins += 100;
+        saveInventory();
+        updateUI();
+        document.getElementById('fightMessage').innerHTML = `🏆 ПОБЕДА! +100 монет 🏆`;
+        botGameState = null;
+        return;
+    }
+    botIsMyTurn = false;
+    botGameState.currentTurn = 'bot';
+    updateBotBattleUI();
+    document.getElementById('turnIndicator').innerHTML = '🔴 ХОД БОТА 🔴';
+    setTimeout(() => {
+        if (botGameState && botGameState.currentTurn === 'bot') {
+            const player = botGameState.players.find(p => p.id === 'player');
+            const bot = botGameState.players.find(p => p.id === 'bot');
+            const dmg = bot.damage * (bot.hits || 1);
+            player.hp = Math.max(0, player.hp - dmg);
             if (player.hp <= 0) {
                 document.getElementById('fightMessage').innerHTML = `💀 ПОРАЖЕНИЕ! 💀`;
-                gameState = null;
-                updateBattleUI();
-                document.getElementById('turnIndicator').innerHTML = '⚔️ Нажми "Играть" для новой битвы ⚔️';
-                return;
+                botGameState = null;
+            } else {
+                botIsMyTurn = true;
+                botGameState.currentTurn = 'player';
+                document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
             }
-            
-            isMyTurn = true;
-            gameState.currentTurn = 'player';
-            updateBattleUI();
-            document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
+            updateBotBattleUI();
+        }
+    }, 800);
+};
+
+window.botUseMedkit = function() {
+    if (!botGameState || !botIsMyTurn) return;
+    const player = botGameState.players.find(p => p.id === 'player');
+    if (player.medkits > 0) {
+        const heal = Math.floor(player.maxHp * 0.2);
+        player.hp = Math.min(player.maxHp, player.hp + heal);
+        player.medkits--;
+        document.getElementById('fightMessage').innerHTML = `💊 Восстановлено ${heal} HP!`;
+        botIsMyTurn = false;
+        botGameState.currentTurn = 'bot';
+        updateBotBattleUI();
+        setTimeout(() => {
+            if (botGameState && botGameState.currentTurn === 'bot') {
+                const player = botGameState.players.find(p => p.id === 'player');
+                const bot = botGameState.players.find(p => p.id === 'bot');
+                const dmg = bot.damage * (bot.hits || 1);
+                player.hp = Math.max(0, player.hp - dmg);
+                if (player.hp <= 0) {
+                    document.getElementById('fightMessage').innerHTML = `💀 ПОРАЖЕНИЕ! 💀`;
+                    botGameState = null;
+                } else {
+                    botIsMyTurn = true;
+                    botGameState.currentTurn = 'player';
+                    document.getElementById('turnIndicator').innerHTML = '🟢 ВАШ ХОД! 🟢';
+                }
+                updateBotBattleUI();
+            }
+        }, 800);
+    } else {
+        document.getElementById('fightMessage').innerHTML = '❌ Нет аптечек!';
+    }
+};        let currentRoomId = null, pvpGameState = null, pvpIsMyTurn = false, pvpRoomRef = null;
+
+        function generateRoomId() { return Math.random().toString(36).substring(2, 8).toUpperCase(); }
+
+        window.createPvpRoom = async function() {
+            if (!firebaseReady) { document.getElementById('pvpStatus').innerHTML = '❌ Firebase не подключена!'; return; }
+            const roomId = generateRoomId();
+            currentRoomId = roomId;
+            const char = findCharacterById(inventory.selectedCharacter);
+            try {
+                await database.ref(`pvp_rooms/${roomId}`).set({
+                    player1: { id: 'player1', name: char.name, hp: char.hp, maxHp: char.maxHp, damage: char.damage, hits: char.hits, medkits: 3, side: char.side },
+                    player2: null, currentTurn: 'player1', status: 'waiting', createdAt: Date.now()
+                });
+                document.getElementById('roomCodeDisplay').style.display = 'block';
+                document.getElementById('roomCode').innerText = roomId;
+                pvpRoomRef = database.ref(`pvp_rooms/${roomId}`);
+                pvpRoomRef.on('value', (snapshot) => { const data = snapshot.val(); if (data && data.player2) handlePvpUpdate(data); });
+            } catch(e) { document.getElementById('pvpStatus').innerHTML = `❌ ${e.message}`; }
+        };
+
+        window.joinPvpRoom = async function() {
+            const roomId = document.getElementById('joinRoomInput').value.trim().toUpperCase();
+            if (!roomId) return;
+            const snapshot = await database.ref(`pvp_rooms/${roomId}`).get();
+            const room = snapshot.val();
+            if (!room || room.player2) return;
+            currentRoomId = roomId;
+            const char = findCharacterById(inventory.selectedCharacter);
+            await database.ref(`pvp_rooms/${roomId}/player2`).set({ id: 'player2', name: char.name, hp: char.hp, maxHp: char.maxHp, damage: char.damage, hits: char.hits, medkits: 3, side: char.side });
+            await database.ref(`pvp_rooms/${roomId}/status`).set('playing');
+            pvpRoomRef = database.ref(`pvp_rooms/${roomId}`);
+            pvpRoomRef.on('value', (snapshot) => { const data = snapshot.val(); if (data) handlePvpUpdate(data); });
+        };
+
+        function handlePvpUpdate(roomData) {
+            if (!roomData.player1 || !roomData.player2) return;
+            const isPlayer1 = roomData.player1.id === 'player1';
+            const myPlayer = isPlayer1 ? roomData.player1 : roomData.player2;
+            const opponent = isPlayer1 ? roomData.player2 : roomData.player1;
+            pvpGameState = { myPlayer, opponent, currentTurn: roomData.currentTurn };
+            pvpIsMyTurn = (roomData.currentTurn === (isPlayer1 ? 'player1' : 'player2'));
+            const myHpPercent = (myPlayer.hp / myPlayer.maxHp) * 100;
+            const oppHpPercent = (opponent.hp / opponent.maxHp) * 100;
+            document.getElementById('pvpCharacters').innerHTML = `
+                <div class="character-card"><div class="character-name">${myPlayer.name} (ВЫ)</div><div class="hp-bar"><div class="hp-fill" style="width: ${myHpPercent}%">${myPlayer.hp}/${myPlayer.maxHp}</div></div><div>⚔️ Урон: ${myPlayer.damage}</div><div>💊 Аптечки: ${myPlayer.medkits}/3</div></div>
+                <div class="character-card"><div class="character-name">${opponent.name} (СОПЕРНИК)</div><div class="hp-bar"><div class="hp-fill" style="width: ${oppHpPercent}%">${opponent.hp}/${opponent.maxHp}</div></div><div>⚔️ Урон: ${opponent.damage}</div><div>💊 Аптечки: ${opponent.medkits}/3</div></div>`;
+            document.getElementById('pvpArena').style.display = 'block';
+            document.getElementById('pvpTurnIndicator').innerHTML = pvpIsMyTurn ? '🟢 ВАШ ХОД!' : '🔴 ХОД СОПЕРНИКА';
+            document.getElementById('pvpTurnIndicator').style.color = pvpIsMyTurn ? '#2ecc71' : '#e74c3c';
         }
 
-        window.useMedkit = function() {
-            if (!gameState || !isMyTurn) { document.getElementById('fightMessage').innerHTML = '⏳ Сейчас не ваш ход!'; return; }
-            const player = gameState.players.find(p => p.id === 'player');
-            if (player.medkits > 0) {
-                const heal = Math.floor(player.maxHp * 0.2);
-                player.hp = Math.min(player.maxHp, player.hp + heal);
-                player.medkits--;
-                document.getElementById('fightMessage').innerHTML = `💊 Вы восстановили ${heal} HP! Осталось аптечек: ${player.medkits}`;
-                isMyTurn = false;
-                gameState.currentTurn = 'bot';
-                updateBattleUI();
-                document.getElementById('turnIndicator').innerHTML = '🔴 ХОД БОТА 🔴';
-                setTimeout(() => botTurn(), 800);
+        window.pvpAttack = async function() {
+            if (!pvpIsMyTurn || !currentRoomId) return;
+            const snapshot = await database.ref(`pvp_rooms/${currentRoomId}`).get();
+            const room = snapshot.val();
+            if (!room) return;
+            const isPlayer1 = room.player1.id === 'player1';
+            const myPlayer = isPlayer1 ? room.player1 : room.player2;
+            const opponent = isPlayer1 ? room.player2 : room.player1;
+            const damage = myPlayer.damage * (myPlayer.hits || 1);
+            opponent.hp = Math.max(0, opponent.hp - damage);
+            if (opponent.hp <= 0) {
+                await database.ref(`pvp_rooms/${currentRoomId}/status`).set('gameover');
+                await database.ref(`pvp_rooms/${currentRoomId}/winner`).set(myPlayer.name);
+                inventory.coins += 150;
+                saveInventory();
+                updateUI();
+                document.getElementById('pvpMessage').innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
             } else {
-                document.getElementById('fightMessage').innerHTML = '❌ Нет аптечек!';
+                const nextTurn = isPlayer1 ? 'player2' : 'player1';
+                await database.ref(`pvp_rooms/${currentRoomId}/currentTurn`).set(nextTurn);
+                await database.ref(`pvp_rooms/${currentRoomId}/${isPlayer1 ? 'player1' : 'player2'}`).set(myPlayer);
+                await database.ref(`pvp_rooms/${currentRoomId}/${isPlayer1 ? 'player2' : 'player1'}`).set(opponent);
             }
         };
 
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        loadInventory();
-        updateUI();
+        window.pvpUseMedkit = async function() {
+            if (!pvpIsMyTurn || !currentRoomId) return;
+            const snapshot = await database.ref(`pvp_rooms/${currentRoomId}`).get();
+            const room = snapshot.val();
+            if (!room) return;
+            const isPlayer1 = room.player1.id === 'player1';
+            const myPlayer = isPlayer1 ? room.player1 : room.player2;
+            if (myPlayer.medkits > 0) {
+                const heal = Math.floor(myPlayer.maxHp * 0.2);
+                myPlayer.hp = Math.min(myPlayer.maxHp, myPlayer.hp + heal);
+                myPlayer.medkits--;
+                const nextTurn = isPlayer1 ? 'player2' : 'player1';
+                await database.ref(`pvp_rooms/${currentRoomId}/currentTurn`).set(nextTurn);
+                await database.ref(`pvp_rooms/${currentRoomId}/${isPlayer1 ? 'player1' : 'player2'}`).set(myPlayer);
+            }
+        };
 
-        document.getElementById('botBtn').onclick = () => startBattle();
-        document.getElementById('attackBtn').onclick = () => playerAttack();
-        document.getElementById('medkitBtn').onclick = () => useMedkit();
+        window.leavePvpRoom = async function() {
+            if (currentRoomId) await database.ref(`pvp_rooms/${currentRoomId}`).remove();
+            currentRoomId = null;
+            document.getElementById('pvpArena').style.display = 'none';
+            document.getElementById('roomCodeDisplay').style.display = 'none';
+        };
 
-        document.querySelectorAll('.case-card').forEach(card => {
-            card.onclick = () => openCase(card.dataset.side, card.dataset.price);
-        });
-
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.tab).classList.add('active');
-            };
+        loadInventory(); updateUI();
+        document.getElementById('createRoomBtn').onclick = () => createPvpRoom();
+        document.getElementById('joinRoomBtn').onclick = () => joinPvpRoom();
+        document.getElementById('copyCodeBtn').onclick = () => { navigator.clipboard.writeText(document.getElementById('roomCode').innerText); };
+        document.getElementById('leavePvpBtn').onclick = () => leavePvpRoom();
+        document.getElementById('pvpAttackBtn').onclick = () => pvpAttack();
+        document.getElementById('pvpMedkitBtn').onclick = () => pvpUseMedkit();
+        document.getElementById('botBtn').onclick = () => startBotBattle();
+        document.getElementById('attackBtn').onclick = () => botAttack();
+        document.getElementById('medkitBtn').onclick = () => botUseMedkit();
+        document.querySelectorAll('.case-card').forEach(c => c.onclick = () => openCase(c.dataset.side, c.dataset.price));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.onclick = () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
         });
     </script>
 </body>
