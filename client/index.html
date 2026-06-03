@@ -8,7 +8,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
         body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); font-family: 'Segoe UI', sans-serif; color: white; padding-bottom: 70px; }
         
-        /* Нижнее меню */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -88,7 +87,6 @@
             </div>
         </div>
 
-        <!-- Панели -->
         <div id="pvpPanel" class="panel">
             <h3>🌍 ИГРАТЬ С ДРУГОМ</h3>
             <div class="pvp-menu">
@@ -150,18 +148,6 @@
                 <button id="applyPromoBtn" class="pvp-btn" style="padding: 12px 20px;">Активировать</button>
             </div>
             <div id="promoMessage" class="message" style="margin-top: 20px;"></div>
-            <div style="margin-top: 30px;">
-                <h4>📋 Доступные промокоды:</h4>
-                <div style="background: rgba(0,0,0,0.5); border-radius: 12px; padding: 15px; margin-top: 10px;">
-                    <p><strong>WELCOME100</strong> — 100 монет + 10 гемов</p>
-                    <p><strong>ANIME2025</strong> — 500 монет + 25 гемов</p>
-                    <p><strong>SKIBIDI</strong> — 300 монет + 15 гемов</p>
-                    <p><strong>PVP2025</strong> — 200 монет + 20 гемов</p>
-                    <p><strong>GAME_KIBER</strong> — 5000 монет + 500 гемов</p>
-                    <p><strong>MATVEY_ART</strong> — 3000 монет + 200 гемов</p>
-                    <p><strong style="color: gold;">FOGGEZ_END</strong> — 999999 монет + 999999 гемов + 4 админских персонажа</p>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -521,7 +507,6 @@ window.leavePvpRoom = function() {
             setTimeout(() => { msgDiv.innerHTML = ''; }, 3000);
         }
         
-        // Навигация
         document.querySelectorAll('.nav-item').forEach(item => {
             item.onclick = () => {
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -532,7 +517,6 @@ window.leavePvpRoom = function() {
         });
         document.querySelector('.nav-item').classList.add('active');
         
-        // Кнопки
         document.getElementById('createRoomBtn').onclick = () => socket.emit('createRoom');
         document.getElementById('joinRoomBtn').onclick = () => { const id = document.getElementById('joinRoomInput').value.trim().toUpperCase(); if(id) socket.emit('joinRoom', id); };
         document.getElementById('copyCodeBtn').onclick = () => navigator.clipboard.writeText(document.getElementById('roomCode').innerText);
