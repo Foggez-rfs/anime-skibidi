@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Anime vs Skibidi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">⚔️ Anime vs Skibidi ⚔️</div>
+            <div class="currency">
+                <div class="coin">🪙 <span id="coins">1000</span></div>
+                <div class="gem">💎 <span id="gems">50</span></div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="fight">⚔️ Бой</button>
+            <button class="tab-btn" data-tab="cases">📦 Кейсы</button>
+            <button class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+            <button class="tab-btn" data-tab="upgrade">⬆️ Улучшения</button>
+            <button class="tab-btn" data-tab="craft">🔮 Крафт</button>
+            <button class="tab-btn" data-tab="rank">🏆 Ранг</button>
+        </div>
+
+        <!-- Панель боя -->
+        <div id="fight" class="panel active">
+            <div class="arena">
+                <div class="vs">VS</div>
+                <div class="characters" id="characters"></div>
+                <div id="turnIndicator" class="turn-indicator"></div>
+                <div class="controls">
+                    <button id="attackBtn" class="attack-btn">⚔️ АТАКОВАТЬ</button>
+                    <button id="medkitBtn" class="medkit-btn">💊 АПТЕЧКА</button>
+                </div>
+                <div id="fightMessage" class="message"></div>
+            </div>
+            <div class="bot-btn-container">
+                <button id="botBtn" class="bot-btn">🤖 ИГРАТЬ С БОТОМ</button>
+            </div>
+        </div>
+
+        <!-- Панель кейсов -->
+        <div id="cases" class="panel">
+            <h3>📦 ОТКРЫТЬ КЕЙС</h3>
+            <div class="cases-grid">
+                <div class="case-card" data-side="anime" data-price="coins">
+                    <div class="case-icon">🎴</div>
+                    <h4>Anime кейс</h4>
+                    <p>🪙 500 монет</p>
+                    <p class="chance">Шанс на легендарку 4%</p>
+                </div>
+                <div class="case-card" data-side="skibidi" data-price="coins">
+                    <div class="case-icon">🚽</div>
+                    <h4>Skibidi кейс</h4>
+                    <p>🪙 500 монет</p>
+                    <p class="chance">Шанс на легендарку 4%</p>
+                </div>
+                <div class="case-card premium" data-side="anime" data-price="gems">
+                    <div class="case-icon">✨</div>
+                    <h4>Премиум Anime</h4>
+                    <p>💎 50 гемов</p>
+                    <p class="chance">+2% к шансу на ультра</p>
+                </div>
+                <div class="case-card premium" data-side="skibidi" data-price="gems">
+                    <div class="case-icon">✨</div>
+                    <h4>Премиум Skibidi</h4>
+                    <p>💎 50 гемов</p>
+                    <p class="chance">+2% к шансу на ультра</p>
+                </div>
+            </div>
+            <div id="caseResult" class="case-result"></div>
+        </div>
+
+        <!-- Панель инвентаря -->
+        <div id="inventory" class="panel">
+            <h3>🎒 МОИ ПЕРСОНАЖИ</h3>
+            <div id="inventoryList" class="inventory-grid"></div>
+        </div>
+
+        <!-- Панель улучшений -->
+        <div id="upgrade" class="panel">
+            <h3>⬆️ УЛУЧШИТЬ ПЕРСОНАЖА</h3>
+            <p>Каждое улучшение: +15% к ХП и урону | Стоимость: 500 монет</p>
+            <div id="upgradeList" class="upgrade-grid"></div>
+        </div>
+
+        <!-- Панель крафта -->
+        <div id="craft" class="panel">
+            <h3>🔮 ЗОЛОТАЯ И АЛМАЗНАЯ МАШИНА</h3>
+            <div class="craft-grid">
+                <div class="craft-card" data-type="golden">
+                    <h4>⭐ ЗОЛОТАЯ МАШИНА</h4>
+                    <p>3 обычных → 1 золотой</p>
+                    <p>Стоимость: 250 монет</p>
+                    <button class="craft-btn" data-craft="golden">СКРАФТИТЬ</button>
+                </div>
+                <div class="craft-card" data-type="diamond">
+                    <h4>💎 АЛМАЗНАЯ МАШИНА</h4>
+                    <p>3 золотых → 1 алмазный</p>
+                    <p>Стоимость: 700 монет</p>
+                    <button class="craft-btn" data-craft="diamond">СКРАФТИТЬ</button>
+                </div>
+            </div>
+            <div id="craftResult" class="craft-result"></div>
+        </div>
+
+        <!-- Панель ранга -->
+        <div id="rank" class="panel">
+            <h3>🏆 РАНГОВАЯ СИСТЕМА</h3>
+            <div class="rank-info">
+                <div class="current-rank">
+                    <h4>Текущий ранг:</h4>
+                    <div class="rank-badge" id="currentRank">Бронза 5</div>
+                    <div class="rank-progress">
+                        <div class="rank-progress-bar" id="rankProgress" style="width: 0%"></div>
+                    </div>
+                    <p id="rankPoints">0 / 100 очков</p>
+                </div>
+                <div class="rank-leagues">
+                    <h4>Лиги:</h4>
+                    <div class="leagues">
+                        <span class="league bronze">🥉 Бронза</span>
+                        <span class="league silver">🥈 Серебро</span>
+                        <span class="league gold">🥇 Золото</span>
+                        <span class="league diamond">💎 Алмаз</span>
+                        <span class="league emerald">📗 Изумруд</span>
+                        <span class="league platinum">🏆 Платина</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" class="loading">Загрузка...</div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
