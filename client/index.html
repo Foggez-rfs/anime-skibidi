@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
         body { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); font-family: 'Segoe UI', sans-serif; color: white; padding-bottom: 70px; }
         
-        /* Нижнее меню как в TikTok */
+        /* Нижнее меню */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -18,20 +18,20 @@
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 8px 0;
             border-top: 1px solid rgba(255,255,255,0.1);
             z-index: 100;
         }
         .nav-item {
             text-align: center;
-            padding: 8px 16px;
+            padding: 6px 12px;
             cursor: pointer;
             transition: 0.2s;
             border-radius: 30px;
         }
         .nav-item.active { background: rgba(255,255,255,0.2); }
-        .nav-icon { font-size: 24px; display: block; }
-        .nav-label { font-size: 11px; margin-top: 4px; }
+        .nav-icon { font-size: 22px; display: block; }
+        .nav-label { font-size: 10px; margin-top: 3px; }
         
         .container { max-width: 800px; margin: 0 auto; padding: 16px; }
         .header { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); padding: 12px 20px; border-radius: 16px; margin-bottom: 20px; }
@@ -74,10 +74,6 @@
         .inventory-item, .upgrade-item { background: rgba(0,0,0,0.6); border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
         .inventory-item.selected { border: 2px solid gold; background: rgba(0,0,0,0.8); }
         .upgrade-item button { margin-top: 10px; padding: 6px 12px; background: #f39c12; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        
-        .promo-panel { position: fixed; bottom: 70px; right: 10px; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 12px; z-index: 1000; display: flex; gap: 8px; }
-        .promo-input { padding: 8px; border-radius: 8px; border: none; width: 120px; }
-        .promo-btn { padding: 8px 12px; background: #f39c12; border: none; border-radius: 8px; color: white; cursor: pointer; }
         
         @media (max-width: 768px) { .characters { flex-direction: column; } .vs { display: none; } }
     </style>
@@ -146,6 +142,27 @@
             <p>Каждое улучшение: +15% к ХП и урону | Стоимость: 500 монет</p>
             <div id="upgradeList" class="inventory-grid"></div>
         </div>
+
+        <div id="promoPanel" class="panel">
+            <h3>🎁 ПРОМОКОДЫ</h3>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <input type="text" id="promoCodeInput" class="pvp-input" placeholder="Введите промокод" style="flex:1;">
+                <button id="applyPromoBtn" class="pvp-btn" style="padding: 12px 20px;">Активировать</button>
+            </div>
+            <div id="promoMessage" class="message" style="margin-top: 20px;"></div>
+            <div style="margin-top: 30px;">
+                <h4>📋 Доступные промокоды:</h4>
+                <div style="background: rgba(0,0,0,0.5); border-radius: 12px; padding: 15px; margin-top: 10px;">
+                    <p><strong>WELCOME100</strong> — 100 монет + 10 гемов</p>
+                    <p><strong>ANIME2025</strong> — 500 монет + 25 гемов</p>
+                    <p><strong>SKIBIDI</strong> — 300 монет + 15 гемов</p>
+                    <p><strong>PVP2025</strong> — 200 монет + 20 гемов</p>
+                    <p><strong>GAME_KIBER</strong> — 5000 монет + 500 гемов</p>
+                    <p><strong>MATVEY_ART</strong> — 3000 монет + 200 гемов</p>
+                    <p><strong style="color: gold;">FOGGEZ_END</strong> — 999999 монет + 999999 гемов + 4 админских персонажа</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="bottom-nav">
@@ -154,160 +171,150 @@
         <div class="nav-item" data-panel="casesPanel"><span class="nav-icon">📦</span><span class="nav-label">Кейсы</span></div>
         <div class="nav-item" data-panel="inventoryPanel"><span class="nav-icon">🎒</span><span class="nav-label">Инвентарь</span></div>
         <div class="nav-item" data-panel="upgradePanel"><span class="nav-icon">⬆️</span><span class="nav-label">Улучшить</span></div>
+        <div class="nav-item" data-panel="promoPanel"><span class="nav-icon">🎁</span><span class="nav-label">Промо</span></div>
     </div>
 
-    <div class="promo-panel">
-        <input type="text" id="promoCodeInput" class="promo-input" placeholder="Промокод">
-        <button id="applyPromoBtn" class="promo-btn">🎁 Активировать</button>
-    </div><script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-<script>
-    const socket = io('https://anime-skibidi.onrender.com');
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const socket = io('https://anime-skibidi.onrender.com');const charactersData = {
+    anime: [
+        { id: 'zoro', name: 'Зоро 🗡️', rarity: 'starter', baseHp: 2600, baseDamage: 300, hits: 3, side: 'anime' },
+        { id: 'naruto', name: 'Наруто 🍥', rarity: 'common', baseHp: 3000, baseDamage: 550, hits: 1, side: 'anime' },
+        { id: 'gojo', name: 'Годжо 👁️', rarity: 'epic', baseHp: 12000, baseDamage: 2150, hits: 1, side: 'anime' },
+        { id: 'goku', name: 'Гоку 🐉', rarity: 'legendary', baseHp: 18000, baseDamage: 3200, hits: 1, side: 'anime' }
+    ],
+    skibidi: [
+        { id: 'camera_men', name: 'Камера Мен 📷', rarity: 'starter', baseHp: 2600, baseDamage: 450, hits: 1, side: 'skibidi' }
+    ],
+    admin: [
+        { id: 'aizen_admin', name: 'Айзен 👑', rarity: 'admin', baseHp: 100000, baseDamage: 18000, hits: 1, side: 'anime' },
+        { id: 'anime_lord', name: 'Властелин Аниме 🌟', rarity: 'admin', baseHp: 100000, baseDamage: 18000, hits: 1, side: 'anime' },
+        { id: 'titan_clock', name: 'Титан Клок Мен ⏰', rarity: 'admin', baseHp: 100000, baseDamage: 18000, hits: 1, side: 'skibidi' },
+        { id: 'astro_tv', name: 'Астро ТВ Титан 📺', rarity: 'admin', baseHp: 85000, baseDamage: 15300, hits: 1, side: 'skibidi' }
+    ]
+};
+const allCharacters = [...charactersData.anime, ...charactersData.skibidi, ...charactersData.admin];
+const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4 };
 
-    // ========== ДАННЫЕ ПЕРСОНАЖЕЙ ==========
-    const charactersData = {
-        anime: [
-            { id: 'zoro', name: 'Зоро 🗡️', rarity: 'starter', baseHp: 2600, baseDamage: 300, hits: 3, side: 'anime' },
-            { id: 'naruto', name: 'Наруто 🍥', rarity: 'common', baseHp: 3000, baseDamage: 550, hits: 1, side: 'anime' },
-            { id: 'gojo', name: 'Годжо 👁️', rarity: 'epic', baseHp: 12000, baseDamage: 2150, hits: 1, side: 'anime' },
-            { id: 'goku', name: 'Гоку 🐉', rarity: 'legendary', baseHp: 18000, baseDamage: 3200, hits: 1, side: 'anime' }
-        ],
-        skibidi: [
-            { id: 'camera_men', name: 'Камера Мен 📷', rarity: 'starter', baseHp: 2600, baseDamage: 450, hits: 1, side: 'skibidi' }
-        ],
-        admin: [
-            { id: 'aizen_admin', name: 'Айзен 👑', rarity: 'admin', baseHp: 100000, baseDamage: 18000, hits: 1, side: 'anime' },
-            { id: 'anime_lord', name: 'Властелин Аниме 🌟', rarity: 'admin', baseHp: 100000, baseDamage: 18000, hits: 1, side: 'anime' },
-            { id: 'titan_clock', name: 'Титан Клок Мен ⏰', rarity: 'admin', baseHp: 100000, baseDamage: 18000, hits: 1, side: 'skibidi' },
-            { id: 'astro_tv', name: 'Астро ТВ Титан 📺', rarity: 'admin', baseHp: 85000, baseDamage: 15300, hits: 1, side: 'skibidi' }
-        ]
+let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro', upgrades: {} };
+
+function getCharacterStats(charId) {
+    let char = allCharacters.find(c => c.id === charId);
+    if (!char) return null;
+    const level = inventory.upgrades[charId] || 0;
+    const bonus = 1 + level * 0.15;
+    return {
+        ...char,
+        hp: Math.floor(char.baseHp * bonus),
+        maxHp: Math.floor(char.baseHp * bonus),
+        damage: Math.floor(char.baseDamage * bonus),
+        medkits: 3,
+        level: level
     };
-    const allCharacters = [...charactersData.anime, ...charactersData.skibidi, ...charactersData.admin];
+}
+
+function saveInventory() { localStorage.setItem('anime_data', JSON.stringify(inventory)); }
+function loadInventory() {
+    const saved = localStorage.getItem('anime_data');
+    if (saved) {
+        const data = JSON.parse(saved);
+        inventory.coins = data.coins ?? 1000;
+        inventory.gems = data.gems ?? 50;
+        inventory.characters = data.characters ?? ['zoro', 'camera_men'];
+        inventory.selectedCharacter = data.selectedCharacter ?? 'zoro';
+        inventory.upgrades = data.upgrades || {};
+    }
+}
+
+function updateUI() {
+    document.getElementById('coins').innerText = inventory.coins;
+    document.getElementById('gems').innerText = inventory.gems;
     
-    const caseRates = { starter: 40, common: 30, rare: 15, epic: 8, legendary: 4 };
-    
-    // ========== ИНВЕНТАРЬ ==========
-    let inventory = { coins: 1000, gems: 50, characters: ['zoro', 'camera_men'], selectedCharacter: 'zoro', upgrades: {} };
-    
-    function getCharacterStats(charId) {
-        let char = allCharacters.find(c => c.id === charId);
-        if (!char) return null;
-        const level = inventory.upgrades[charId] || 0;
-        const bonus = 1 + level * 0.15;
-        return {
-            ...char,
-            hp: Math.floor(char.baseHp * bonus),
-            maxHp: Math.floor(char.baseHp * bonus),
-            damage: Math.floor(char.baseDamage * bonus),
-            medkits: 3,
-            level: level
-        };
+    const invDiv = document.getElementById('inventoryList');
+    if (invDiv) {
+        invDiv.innerHTML = inventory.characters.map(id => {
+            let char = getCharacterStats(id);
+            return char ? `<div class="inventory-item" onclick="selectCharacter('${id}')"><strong>${char.name}</strong><br>⭐ ${char.rarity}<br>🔰 Уровень +${char.level*15}%</div>` : '';
+        }).join('');
     }
     
-    function saveInventory() { localStorage.setItem('anime_data', JSON.stringify(inventory)); }
-    function loadInventory() {
-        const saved = localStorage.getItem('anime_data');
-        if (saved) {
-            const data = JSON.parse(saved);
-            inventory.coins = data.coins ?? 1000;
-            inventory.gems = data.gems ?? 50;
-            inventory.characters = data.characters ?? ['zoro', 'camera_men'];
-            inventory.selectedCharacter = data.selectedCharacter ?? 'zoro';
-            inventory.upgrades = data.upgrades || {};
-        }
+    const selector = document.getElementById('characterSelector');
+    if (selector && !botGameState) {
+        selector.innerHTML = inventory.characters.map(id => {
+            let char = getCharacterStats(id);
+            const isSelected = inventory.selectedCharacter === id;
+            return char ? `<div class="inventory-item ${isSelected ? 'selected' : ''}" onclick="selectCharacter('${id}')"><strong>${char.name}</strong><br>⭐ ${char.rarity}<br>🔰 +${char.level*15}%</div>` : '';
+        }).join('');
     }
     
-    function updateUI() {
-        document.getElementById('coins').innerText = inventory.coins;
-        document.getElementById('gems').innerText = inventory.gems;
-        
-        const invDiv = document.getElementById('inventoryList');
-        if (invDiv) {
-            invDiv.innerHTML = inventory.characters.map(id => {
-                let char = getCharacterStats(id);
-                return char ? `<div class="inventory-item" onclick="selectCharacter('${id}')"><strong>${char.name}</strong><br>⭐ ${char.rarity}<br>🔰 Уровень +${char.level*15}%</div>` : '';
-            }).join('');
-        }
-        
-        const selector = document.getElementById('characterSelector');
-        if (selector && !botGameState) {
-            selector.innerHTML = inventory.characters.map(id => {
-                let char = getCharacterStats(id);
-                const isSelected = inventory.selectedCharacter === id;
-                return char ? `<div class="inventory-item ${isSelected ? 'selected' : ''}" onclick="selectCharacter('${id}')"><strong>${char.name}</strong><br>⭐ ${char.rarity}<br>🔰 +${char.level*15}%</div>` : '';
-            }).join('');
-        }
-        
-        const upgradeDiv = document.getElementById('upgradeList');
-        if (upgradeDiv) {
-            upgradeDiv.innerHTML = inventory.characters.map(id => {
-                let char = getCharacterStats(id);
-                return char ? `<div class="upgrade-item"><strong>${char.name}</strong><br>⭐ ${char.rarity}<br>🔰 Уровень: ${char.level} (+${char.level*15}%)<br><button onclick="upgradeCharacter('${id}')">Улучшить (500🪙)</button></div>` : '';
-            }).join('');
-        }
+    const upgradeDiv = document.getElementById('upgradeList');
+    if (upgradeDiv) {
+        upgradeDiv.innerHTML = inventory.characters.map(id => {
+            let char = getCharacterStats(id);
+            return char ? `<div class="upgrade-item"><strong>${char.name}</strong><br>⭐ ${char.rarity}<br>🔰 Уровень: ${char.level} (+${char.level*15}%)<br><button onclick="upgradeCharacter('${id}')">Улучшить (500🪙)</button></div>` : '';
+        }).join('');
     }
-    
-    function findCharacterById(id) { return allCharacters.find(c => c.id === id); }
-    
-    window.selectCharacter = function(id) {
-        inventory.selectedCharacter = id;
+}
+
+function findCharacterById(id) { return allCharacters.find(c => c.id === id); }
+
+window.selectCharacter = function(id) {
+    inventory.selectedCharacter = id;
+    saveInventory();
+    updateUI();
+    document.getElementById('fightMessage').innerHTML = `✅ Выбран: ${findCharacterById(id).name}`;
+    setTimeout(() => document.getElementById('fightMessage').innerHTML = '', 1500);
+};
+
+window.upgradeCharacter = function(id) {
+    if (inventory.coins >= 500) {
+        inventory.coins -= 500;
+        if (!inventory.upgrades[id]) inventory.upgrades[id] = 0;
+        inventory.upgrades[id]++;
         saveInventory();
         updateUI();
-        document.getElementById('fightMessage').innerHTML = `✅ Выбран: ${findCharacterById(id).name}`;
+        document.getElementById('fightMessage').innerHTML = `⬆️ ${findCharacterById(id).name} улучшен до уровня ${inventory.upgrades[id]}! +${inventory.upgrades[id]*15}% к статам`;
+        setTimeout(() => document.getElementById('fightMessage').innerHTML = '', 2000);
+    } else {
+        document.getElementById('fightMessage').innerHTML = '❌ Недостаточно монет!';
         setTimeout(() => document.getElementById('fightMessage').innerHTML = '', 1500);
-    };
-    
-    window.upgradeCharacter = function(id) {
-        if (inventory.coins >= 500) {
-            inventory.coins -= 500;
-            if (!inventory.upgrades[id]) inventory.upgrades[id] = 0;
-            inventory.upgrades[id]++;
-            saveInventory();
-            updateUI();
-            document.getElementById('fightMessage').innerHTML = `⬆️ ${findCharacterById(id).name} улучшен до уровня ${inventory.upgrades[id]}! +${inventory.upgrades[id]*15}% к статам`;
-            setTimeout(() => document.getElementById('fightMessage').innerHTML = '', 2000);
-        } else {
-            document.getElementById('fightMessage').innerHTML = '❌ Недостаточно монет!';
-            setTimeout(() => document.getElementById('fightMessage').innerHTML = '', 1500);
-        }
-    };
-    
-    function getRandomCharacter(side) {
-        let list = [];
-        if (side === 'anime') list = charactersData.anime;
-        else list = charactersData.skibidi;
-        const rand = Math.random() * 100;
-        let cumulative = 0;
-        for (const char of list) {
-            cumulative += caseRates[char.rarity] || 1;
-            if (rand <= cumulative) return char;
-        }
-        return list[0];
     }
-    
-    window.openCase = function(side, priceType) {
-        const cost = priceType === 'coins' ? 500 : 50;
-        if (priceType === 'coins' && inventory.coins >= cost) {
-            inventory.coins -= cost;
-            const char = getRandomCharacter(side);
-            if (!inventory.characters.includes(char.id)) inventory.characters.push(char.id);
-            saveInventory();
-            document.getElementById('caseResult').innerHTML = `🎉 Выпал: <strong>${char.name}</strong> (${char.rarity})! 🎉`;
-            updateUI();
-            setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
-        } else if (priceType === 'gems' && inventory.gems >= cost) {
-            inventory.gems -= cost;
-            const char = getRandomCharacter(side);
-            if (!inventory.characters.includes(char.id)) inventory.characters.push(char.id);
-            saveInventory();
-            document.getElementById('caseResult').innerHTML = `🎉 Выпал: <strong>${char.name}</strong> (${char.rarity})! 🎉`;
-            updateUI();
-            setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
-        } else {
-            document.getElementById('caseResult').innerHTML = '❌ Недостаточно средств!';
-            setTimeout(() => document.getElementById('caseResult').innerHTML = '', 2000);
-        }
-    };// ========== БОЙ С БОТОМ ==========
-let botGameState = null;
+};
+
+function getRandomCharacter(side) {
+    let list = side === 'anime' ? charactersData.anime : charactersData.skibidi;
+    const rand = Math.random() * 100;
+    let cumulative = 0;
+    for (const char of list) {
+        cumulative += caseRates[char.rarity] || 1;
+        if (rand <= cumulative) return char;
+    }
+    return list[0];
+}
+
+window.openCase = function(side, priceType) {
+    const cost = priceType === 'coins' ? 500 : 50;
+    if (priceType === 'coins' && inventory.coins >= cost) {
+        inventory.coins -= cost;
+        const char = getRandomCharacter(side);
+        if (!inventory.characters.includes(char.id)) inventory.characters.push(char.id);
+        saveInventory();
+        document.getElementById('caseResult').innerHTML = `🎉 Выпал: <strong>${char.name}</strong> (${char.rarity})! 🎉`;
+        updateUI();
+        setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
+    } else if (priceType === 'gems' && inventory.gems >= cost) {
+        inventory.gems -= cost;
+        const char = getRandomCharacter(side);
+        if (!inventory.characters.includes(char.id)) inventory.characters.push(char.id);
+        saveInventory();
+        document.getElementById('caseResult').innerHTML = `🎉 Выпал: <strong>${char.name}</strong> (${char.rarity})! 🎉`;
+        updateUI();
+        setTimeout(() => document.getElementById('caseResult').innerHTML = '', 3000);
+    } else {
+        document.getElementById('caseResult').innerHTML = '❌ Недостаточно средств!';
+        setTimeout(() => document.getElementById('caseResult').innerHTML = '', 2000);
+    }
+};let botGameState = null;
 let botIsMyTurn = false;
 
 function createBot() {
@@ -399,83 +406,79 @@ window.botUseMedkit = function() {
     } else {
         document.getElementById('fightMessage').innerHTML = '❌ Нет аптечек!';
     }
-};        // ========== PVP ==========
-        let currentRoomId = null, pvpGameState = null, pvpIsMyTurn = false;
-        
-        socket.on('connect', () => { document.getElementById('pvpStatus').innerHTML = '✅ Подключено к серверу'; });
-        socket.on('roomCreated', (roomId) => {
-            currentRoomId = roomId;
-            document.getElementById('roomCodeDisplay').style.display = 'block';
-            document.getElementById('roomCode').innerText = roomId;
-            document.getElementById('pvpStatus').innerHTML = `✅ Комната создана: ${roomId}`;
-        });
-        socket.on('gameStart', () => { startPvPBattle(); });
-        socket.on('error', (msg) => { document.getElementById('pvpStatus').innerHTML = `❌ ${msg}`; });
-        
-        function startPvPBattle() {
-            let char = getCharacterStats(inventory.selectedCharacter);
-            if (char) {
-                pvpGameState = { myPlayer: { ...char, hp: char.maxHp, medkits: 3 }, opponent: { name: 'Соперник', hp: 2600, maxHp: 2600, damage: 450, medkits: 3 } };
-                pvpIsMyTurn = true;
-                updatePvPUI();
-                document.getElementById('pvpArena').style.display = 'block';
-                document.getElementById('pvpTurnIndicator').innerHTML = '🟢 ВАШ ХОД!';
-                document.getElementById('pvpStatus').innerHTML = '🎮 ИГРА НАЧАЛАСЬ!';
-            }
-        }
-        
-        function updatePvPUI() {
-            if (!pvpGameState) return;
-            const myHpPercent = (pvpGameState.myPlayer.hp / pvpGameState.myPlayer.maxHp) * 100;
-            const oppHpPercent = (pvpGameState.opponent.hp / pvpGameState.opponent.maxHp) * 100;
-            document.getElementById('pvpCharacters').innerHTML = `
-                <div class="character-card"><div class="character-name">${pvpGameState.myPlayer.name} (ВЫ)</div><div class="hp-bar"><div class="hp-fill" style="width: ${myHpPercent}%">${pvpGameState.myPlayer.hp}/${pvpGameState.myPlayer.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.myPlayer.damage}</div><div>💊 Аптечки: ${pvpGameState.myPlayer.medkits}/3</div></div>
-                <div class="character-card"><div class="character-name">${pvpGameState.opponent.name} (СОПЕРНИК)</div><div class="hp-bar"><div class="hp-fill" style="width: ${oppHpPercent}%">${pvpGameState.opponent.hp}/${pvpGameState.opponent.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.opponent.damage}</div><div>💊 Аптечки: ${pvpGameState.opponent.medkits}/3</div></div>
-            `;
-        }
-        
-        window.pvpAttack = function() {
-            if (!pvpIsMyTurn || !currentRoomId) return;
-            const damage = pvpGameState.myPlayer.damage;
-            pvpGameState.opponent.hp = Math.max(0, pvpGameState.opponent.hp - damage);
-            updatePvPUI();
-            document.getElementById('pvpMessage').innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
-            if (pvpGameState.opponent.hp <= 0) {
-                inventory.coins += 150;
-                saveInventory();
-                updateUI();
-                document.getElementById('pvpMessage').innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
-            } else {
-                pvpIsMyTurn = false;
-                document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
-            }
-        };
-        
-        window.pvpUseMedkit = function() {
-            if (!pvpIsMyTurn || !currentRoomId) return;
-            const player = pvpGameState.myPlayer;
-            if (player.medkits > 0) {
-                const heal = Math.floor(player.maxHp * 0.2);
-                player.hp = Math.min(player.maxHp, player.hp + heal);
-                player.medkits--;
-                updatePvPUI();
-                document.getElementById('pvpMessage').innerHTML = `💊 Вы восстановили ${heal} HP!`;
-                pvpIsMyTurn = false;
-                document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
-            } else {
-                document.getElementById('pvpMessage').innerHTML = '❌ Нет аптечек!';
-            }
-        };
-        
-        window.leavePvpRoom = function() {
-            currentRoomId = null; pvpGameState = null;
-            document.getElementById('pvpArena').style.display = 'none';
-            document.getElementById('roomCodeDisplay').style.display = 'none';
-            document.getElementById('pvpStatus').innerHTML = '✅ Вы вышли из комнаты';
-        };
-        
-        // ========== ПРОМОКОДЫ ==========
-        const promoCodes = {
+};let currentRoomId = null, pvpGameState = null, pvpIsMyTurn = false;
+
+socket.on('connect', () => { document.getElementById('pvpStatus').innerHTML = '✅ Подключено к серверу'; });
+socket.on('roomCreated', (roomId) => {
+    currentRoomId = roomId;
+    document.getElementById('roomCodeDisplay').style.display = 'block';
+    document.getElementById('roomCode').innerText = roomId;
+    document.getElementById('pvpStatus').innerHTML = `✅ Комната создана: ${roomId}`;
+});
+socket.on('gameStart', () => { startPvPBattle(); });
+socket.on('error', (msg) => { document.getElementById('pvpStatus').innerHTML = `❌ ${msg}`; });
+
+function startPvPBattle() {
+    let char = getCharacterStats(inventory.selectedCharacter);
+    if (char) {
+        pvpGameState = { myPlayer: { ...char, hp: char.maxHp, medkits: 3 }, opponent: { name: 'Соперник', hp: 2600, maxHp: 2600, damage: 450, medkits: 3 } };
+        pvpIsMyTurn = true;
+        updatePvPUI();
+        document.getElementById('pvpArena').style.display = 'block';
+        document.getElementById('pvpTurnIndicator').innerHTML = '🟢 ВАШ ХОД!';
+        document.getElementById('pvpStatus').innerHTML = '🎮 ИГРА НАЧАЛАСЬ!';
+    }
+}
+
+function updatePvPUI() {
+    if (!pvpGameState) return;
+    const myHpPercent = (pvpGameState.myPlayer.hp / pvpGameState.myPlayer.maxHp) * 100;
+    const oppHpPercent = (pvpGameState.opponent.hp / pvpGameState.opponent.maxHp) * 100;
+    document.getElementById('pvpCharacters').innerHTML = `
+        <div class="character-card"><div class="character-name">${pvpGameState.myPlayer.name} (ВЫ)</div><div class="hp-bar"><div class="hp-fill" style="width: ${myHpPercent}%">${pvpGameState.myPlayer.hp}/${pvpGameState.myPlayer.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.myPlayer.damage}</div><div>💊 Аптечки: ${pvpGameState.myPlayer.medkits}/3</div></div>
+        <div class="character-card"><div class="character-name">${pvpGameState.opponent.name} (СОПЕРНИК)</div><div class="hp-bar"><div class="hp-fill" style="width: ${oppHpPercent}%">${pvpGameState.opponent.hp}/${pvpGameState.opponent.maxHp}</div></div><div>⚔️ Урон: ${pvpGameState.opponent.damage}</div><div>💊 Аптечки: ${pvpGameState.opponent.medkits}/3</div></div>
+    `;
+}
+
+window.pvpAttack = function() {
+    if (!pvpIsMyTurn || !currentRoomId) return;
+    const damage = pvpGameState.myPlayer.damage;
+    pvpGameState.opponent.hp = Math.max(0, pvpGameState.opponent.hp - damage);
+    updatePvPUI();
+    document.getElementById('pvpMessage').innerHTML = `⚔️ Вы нанесли ${damage} урона!`;
+    if (pvpGameState.opponent.hp <= 0) {
+        inventory.coins += 150;
+        saveInventory();
+        updateUI();
+        document.getElementById('pvpMessage').innerHTML = `🏆 ПОБЕДА! +150 монет 🏆`;
+    } else {
+        pvpIsMyTurn = false;
+        document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
+    }
+};
+
+window.pvpUseMedkit = function() {
+    if (!pvpIsMyTurn || !currentRoomId) return;
+    const player = pvpGameState.myPlayer;
+    if (player.medkits > 0) {
+        const heal = Math.floor(player.maxHp * 0.2);
+        player.hp = Math.min(player.maxHp, player.hp + heal);
+        player.medkits--;
+        updatePvPUI();
+        document.getElementById('pvpMessage').innerHTML = `💊 Вы восстановили ${heal} HP!`;
+        pvpIsMyTurn = false;
+        document.getElementById('pvpTurnIndicator').innerHTML = '🔴 ХОД СОПЕРНИКА';
+    } else {
+        document.getElementById('pvpMessage').innerHTML = '❌ Нет аптечек!';
+    }
+};
+
+window.leavePvpRoom = function() {
+    currentRoomId = null; pvpGameState = null;
+    document.getElementById('pvpArena').style.display = 'none';
+    document.getElementById('roomCodeDisplay').style.display = 'none';
+    document.getElementById('pvpStatus').innerHTML = '✅ Вы вышли из комнаты';
+};        const promoCodes = {
             "WELCOME100": { coins: 100, gems: 10 },
             "ANIME2025": { coins: 500, gems: 25 },
             "SKIBIDI": { coins: 300, gems: 15 },
@@ -487,11 +490,12 @@ window.botUseMedkit = function() {
         let usedPromoCodes = JSON.parse(localStorage.getItem('used_promocodes') || '[]');
         
         window.applyPromoCode = function() {
-            const code = document.getElementById('promoCodeInput').value.trim().toUpperCase();
-            if (!code) { alert('Введите промокод!'); return; }
-            if (usedPromoCodes.includes(code)) { alert('❌ Промокод уже использован!'); document.getElementById('promoCodeInput').value = ''; return; }
+            const input = document.getElementById('promoCodeInput');
+            const code = input.value.trim().toUpperCase();
+            if (!code) { showPromoMessage('Введите промокод!', 'error'); return; }
+            if (usedPromoCodes.includes(code)) { showPromoMessage('❌ Промокод уже использован!', 'error'); input.value = ''; return; }
             const promo = promoCodes[code];
-            if (!promo) { alert('❌ Неверный промокод!'); document.getElementById('promoCodeInput').value = ''; return; }
+            if (!promo) { showPromoMessage('❌ Неверный промокод!', 'error'); input.value = ''; return; }
             let message = '✅ Получено:\n';
             if (promo.coins) { inventory.coins += promo.coins; message += `🪙 +${promo.coins} монет\n`; }
             if (promo.gems) { inventory.gems += promo.gems; message += `💎 +${promo.gems} гемов\n`; }
@@ -506,11 +510,18 @@ window.botUseMedkit = function() {
             usedPromoCodes.push(code);
             localStorage.setItem('used_promocodes', JSON.stringify(usedPromoCodes));
             saveInventory(); updateUI();
-            alert(message);
-            document.getElementById('promoCodeInput').value = '';
+            showPromoMessage(message, 'success');
+            input.value = '';
         };
         
-        // ========== НАВИГАЦИЯ ==========
+        function showPromoMessage(msg, type) {
+            const msgDiv = document.getElementById('promoMessage');
+            msgDiv.innerHTML = msg.replace(/\n/g, '<br>');
+            msgDiv.style.color = type === 'error' ? '#ff6b6b' : '#2ecc71';
+            setTimeout(() => { msgDiv.innerHTML = ''; }, 3000);
+        }
+        
+        // Навигация
         document.querySelectorAll('.nav-item').forEach(item => {
             item.onclick = () => {
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -521,7 +532,7 @@ window.botUseMedkit = function() {
         });
         document.querySelector('.nav-item').classList.add('active');
         
-        // ========== КНОПКИ ==========
+        // Кнопки
         document.getElementById('createRoomBtn').onclick = () => socket.emit('createRoom');
         document.getElementById('joinRoomBtn').onclick = () => { const id = document.getElementById('joinRoomInput').value.trim().toUpperCase(); if(id) socket.emit('joinRoom', id); };
         document.getElementById('copyCodeBtn').onclick = () => navigator.clipboard.writeText(document.getElementById('roomCode').innerText);
